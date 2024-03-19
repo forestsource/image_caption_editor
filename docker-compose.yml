@@ -1,0 +1,14 @@
+version: "3"
+services:
+  node:
+    build: .
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "7777:7777"
+      - "9229:9229"
+    command: sh -c "npm start"
+    stdin_open: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - PORT=7777
