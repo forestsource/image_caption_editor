@@ -6,6 +6,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Unstable_Grid2";
 import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import { ListDirectory } from "./list";
 import { Editor } from "./editor";
@@ -46,9 +47,7 @@ function App() {
           <DatasetsContext.Provider value={{ datasets, setDatasets }}>
             <Grid container>
               <Grid xs={3} id="sidebar-before-grid">
-                <Box>
-                  <Sidebar />
-                </Box>
+                <Sidebar />
               </Grid>
               <Grid xs={9} sx={{ backgroundColor: "blue" }}>
                 <Routes>

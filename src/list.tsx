@@ -1,15 +1,13 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Grid from "@mui/material/Unstable_Grid2";
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-import { get as IDAget, set as IDAset } from "idb-keyval";
-import type { Image, Caption, Dataset } from "./types";
+import type { Dataset } from "./types";
 import { DatasetsContext } from "./App";
 
 const cardStyle = {

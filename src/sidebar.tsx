@@ -1,5 +1,6 @@
 import { Drawer, Button } from "@mui/material";
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -7,7 +8,10 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/Inbox";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 
+import { tagsFromString } from "./tags";
 import { get as IDAget, set as IDAset } from "idb-keyval";
 import type { Image, Caption, Dataset } from "./types";
 import { DatasetsContext } from "./App";
@@ -16,6 +20,7 @@ const drawerWidth = 3 / 12;
 
 export function Sidebar() {
   const { datasets, setDatasets } = useContext(DatasetsContext);
+  let [tags, setTags] = React.useState<string[]>([]);
 
   async function verifyPermission() {
     console.debug("verifyPermission");
@@ -78,11 +83,26 @@ export function Sidebar() {
     console.debug("datasets:", datasets);
     setDatasets(datasets);
   }
+
+  const navigate = useNavigate();
+  let { pageId } = useParams();
+  let pageIndex: number = parseInt(pageId!);
+  let dataset: Dataset = datasets[pageIndex];
+  const pageChange = (index: number) => {
+    console.debug("pageChange: ", index);
+    setTags(tagsFromString(datasets[index].caption.content));
+    navigate(`/edit/${index}`, { state: { id: index } });
+  };
+  const pageChenger = (event: React.ChangeEvent<unknown>, value: number) => {
+    const index = value - 1;
+    pageChange(pageIndex);
+  };
+
   return (
     <Box id="sidebar-box">
       <Drawer
         id="sidebar-drawer"
-        variant="temporary"
+        variant="permanent"
         sx={{
           width: drawerWidth,
           [`& .MuiDrawer-paper`]: {
@@ -110,6 +130,32 @@ export function Sidebar() {
             </ListItemButton>
           </ListItem>
         </List>
+
+        <ImageList sx={{ maxHeight: "80vh" }} cols={2} gap={4}>
+          {datasets.map((dataset, index) => (
+            <ImageListItem
+              key={dataset.image.uri}
+              sx={{
+                "&:hover": {
+                  // backgroundColor: 'primary.main',
+                  opacity: [0.9, 0.8, 0.7],
+                  boxShadow: 2,
+                  cursor: "pointer",
+                },
+              }}
+            >
+              <img
+                src={dataset.image.uri}
+                srcSet={dataset.image.uri}
+                alt={dataset.image.name}
+                loading="lazy"
+                onClick={() => {
+                  pageChange(index);
+                }}
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
       </Drawer>
     </Box>
   );

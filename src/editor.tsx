@@ -85,9 +85,7 @@ export function Editor() {
   // Initialize tags
   // let original_tags: Tag[] = raw_tags.map((tag, index) =>{return {id: index, name: tag}});
   // const [tags, setTags] = React.useState(original_tags);
-  let [tags, setTags] = React.useState<string[]>(
-    dataset.caption.content.split(",")
-  );
+  let [tags, setTags] = React.useState<string[]>([]);
 
   const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
@@ -217,8 +215,8 @@ export function Editor() {
   };
 
   return (
-    <>
-      <Box sx={{ maxHeight: "100vh", backgroundColor: "background.default" }}>
+    <Box>
+      <Box sx={{ backgroundColor: "background.default" }}>
         <Breadcrumbs sx={{ maxHeight: "5%" }} aria-label="breadcrumb">
           <Link to="/" component={RouterLink} underline="hover" color="inherit">
             <Typography>Top</Typography>
@@ -227,33 +225,7 @@ export function Editor() {
         </Breadcrumbs>
         <Grid container spacing={1}>
           <Grid xs={2}>
-            <Card>
-              <ImageList sx={{ maxHeight: "80vh" }} cols={2} gap={4}>
-                {datasets.map((dataset, index) => (
-                  <ImageListItem
-                    key={dataset.image.uri}
-                    sx={{
-                      "&:hover": {
-                        // backgroundColor: 'primary.main',
-                        opacity: [0.9, 0.8, 0.7],
-                        boxShadow: 2,
-                        cursor: "pointer",
-                      },
-                    }}
-                  >
-                    <img
-                      src={dataset.image.uri}
-                      srcSet={dataset.image.uri}
-                      alt={dataset.image.name}
-                      loading="lazy"
-                      onClick={() => {
-                        pageChange(index);
-                      }}
-                    />
-                  </ImageListItem>
-                ))}
-              </ImageList>
-            </Card>
+            <Card></Card>
           </Grid>
           <Grid xs={10}>
             <Card>
@@ -349,6 +321,6 @@ export function Editor() {
           {pageInfoMsg}
         </Alert>
       </Snackbar>
-    </>
+    </Box>
   );
 }
