@@ -11,15 +11,26 @@ import InboxIcon from "@mui/icons-material/Inbox";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 
-import { tagsFromString } from "./tags";
 import { get as IDAget, set as IDAset } from "idb-keyval";
 import type { Image, Caption, Dataset } from "./types";
-import { DatasetsContext } from "./App";
+import { DatasetsContext } from "./Contexts/DatasetsContext";
 
 const drawerWidth = 3 / 12;
 
+let filenameWithoutExtention = (path: string) => {
+  if (path === "" || path === undefined) {
+    return "";
+  }
+  let basename = path.split("/").pop();
+  if (basename === undefined) {
+    return "";
+  }
+  return basename.split(".")[0];
+};
+
 export function Sidebar() {
-  const { datasets, setDatasets } = useContext(DatasetsContext);
+  const { state, dispatch } = useContext(DatasetsContext);
+  const datasets = state.datasets;
   let [tags, setTags] = React.useState<string[]>([]);
 
   async function verifyPermission() {
@@ -60,8 +71,8 @@ export function Sidebar() {
       ) {
         const image: Image = { name: value.name, uri: file_uri };
         images.push(image);
-      }
-      if (file.type == "text/plain") {
+      } else if (file.type == "text/plain") {
+        console.debug("text file: ", value.name, file_uri, file.type);
         const caption: Caption = {
           name: value.name,
           uri: file_uri,
@@ -71,7 +82,11 @@ export function Sidebar() {
       }
     }
     for await (const image of images) {
-      const caption = captions.find((caption) => caption.name === image.name);
+      const caption = captions.find(
+        (caption) =>
+          filenameWithoutExtention(caption.name) ===
+          filenameWithoutExtention(image.name)
+      );
       if (caption) {
         datasets.push({ name: image.name, image, caption, dirHandle });
       } else {
@@ -80,8 +95,7 @@ export function Sidebar() {
         datasets.push({ name: image.name, image, caption, dirHandle });
       }
     }
-    console.debug("datasets:", datasets);
-    setDatasets(datasets);
+    dispatch({ type: "SET_DATASETS", payload: datasets });
   }
 
   const navigate = useNavigate();
@@ -90,7 +104,7 @@ export function Sidebar() {
   let dataset: Dataset = datasets[pageIndex];
   const pageChange = (index: number) => {
     console.debug("pageChange: ", index);
-    setTags(tagsFromString(datasets[index].caption.content));
+    // setTags(tagsFromString(datasets[index].caption.content));
     navigate(`/edit/${index}`, { state: { id: index } });
   };
   const pageChenger = (event: React.ChangeEvent<unknown>, value: number) => {

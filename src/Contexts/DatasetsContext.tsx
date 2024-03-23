@@ -1,5 +1,5 @@
 import React, { createContext, useReducer } from "react";
-import { Dataset } from "./types";
+import { Dataset } from "../types";
 
 type DatasetsState = {
   datasets: Dataset[];

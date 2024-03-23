@@ -8,7 +8,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 import type { Dataset } from "./types";
-import { DatasetsContext } from "./App";
+import { DatasetsContext } from "./Contexts/DatasetsContext";
 
 const cardStyle = {
   width: "18rem",
@@ -34,7 +34,8 @@ const bigOnHover = {
 };
 
 export function ListDirectory() {
-  const { datasets, setDatasets } = useContext(DatasetsContext);
+  const { state, dispatch } = useContext(DatasetsContext);
+  const datasets = state.datasets;
   const navigate = useNavigate();
 
   return (

@@ -12,13 +12,8 @@ import { ListDirectory } from "./list";
 import { Editor } from "./editor";
 import { Dataset } from "./types";
 import { Sidebar } from "./sidebar";
-
-export const DatasetsContext = React.createContext(
-  {} as {
-    datasets: Dataset[];
-    setDatasets: React.Dispatch<React.SetStateAction<Dataset[]>>;
-  }
-);
+import { DatasetsProvider } from "./Contexts/DatasetsContext";
+import { TagEditorProvider } from "./Contexts/TagEditorContext";
 
 function App() {
   const emptyDataset: Dataset[] = [];
@@ -44,19 +39,21 @@ function App() {
         }}
       >
         <BrowserRouter>
-          <DatasetsContext.Provider value={{ datasets, setDatasets }}>
-            <Grid container>
-              <Grid xs={3} id="sidebar-before-grid">
-                <Sidebar />
+          <DatasetsProvider>
+            <TagEditorProvider>
+              <Grid container>
+                <Grid xs={3} id="sidebar-before-grid">
+                  <Sidebar />
+                </Grid>
+                <Grid xs={9} sx={{ backgroundColor: "blue" }}>
+                  <Routes>
+                    <Route path="/" element={<ListDirectory />} />
+                    <Route path="/edit/:pageId" element={<Editor />} />
+                  </Routes>
+                </Grid>
               </Grid>
-              <Grid xs={9} sx={{ backgroundColor: "blue" }}>
-                <Routes>
-                  <Route path="/" element={<ListDirectory />} />
-                  <Route path="/edit/:pageId" element={<Editor />} />
-                </Routes>
-              </Grid>
-            </Grid>
-          </DatasetsContext.Provider>
+            </TagEditorProvider>
+          </DatasetsProvider>
         </BrowserRouter>
       </Container>
     </ThemeProvider>

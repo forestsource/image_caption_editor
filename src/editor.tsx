@@ -34,7 +34,8 @@ import { useHotkeys } from "react-hotkeys-hook";
 
 import "./App.css";
 import type { Dataset } from "./types";
-import { DatasetsContext } from "./App";
+import { DatasetsContext } from "./Contexts/DatasetsContext";
+import { TagEditorContext } from "./Contexts/TagEditorContext";
 
 // DnD
 import {
@@ -67,25 +68,39 @@ interface SortableItemProps {
   children: ReactElement;
 }
 
+const parseTags = (tags: string): string[] => {
+  if (tags === "" || tags === undefined) {
+    return [];
+  }
+  return tags.split(",");
+};
+
 export function Editor() {
   const navigate = useNavigate();
-  const { datasets, setDatasets } = useContext(DatasetsContext);
+  const { state: datasetsState, dispatch: datasetsDispatch } =
+    useContext(DatasetsContext);
+  const { state: tagEditorState, dispatch: tagEditorDispatch } =
+    useContext(TagEditorContext);
+  const datasets = datasetsState.datasets;
+  let tags = tagEditorState.currentTags;
   let { pageId } = useParams();
   let pageIndex: number = parseInt(pageId!);
-  // const [pageIndex, setPageIndex] = useState<number>(pageId);
   let dataset: Dataset = datasets[pageIndex];
   const [onSaveSuccess, setOnSaveSuccess] = React.useState(false);
   const [onSaveFailure, setOnSaveFailure] = React.useState(false);
   const [onPageInfo, setOnPageInfo] = React.useState(false);
   const [pageInfoMsg, setPageInfoMsg] = React.useState("");
 
+  // Change tags when page changes
+  useEffect(() => {
+    tagEditorDispatch({
+      type: "SET_TAGS",
+      payload: datasets[pageIndex].caption.content.split(","),
+    });
+  }, [pageIndex]);
+
   // TODO: make suggest from file
   const TagSuggestionTags = ["black", "white", "hat", ":D", "1girl", "smile"];
-
-  // Initialize tags
-  // let original_tags: Tag[] = raw_tags.map((tag, index) =>{return {id: index, name: tag}});
-  // const [tags, setTags] = React.useState(original_tags);
-  let [tags, setTags] = React.useState<string[]>([]);
 
   const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
@@ -96,7 +111,7 @@ export function Editor() {
     setOnPageInfo(false);
   };
 
-  // DnD
+  /* For DnD */
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -142,26 +157,25 @@ export function Editor() {
           })
           .indexOf(String(over.id));
         const newState = arrayMove(tags, oldIndex, newIndex);
-        setTags(newState);
+        tagEditorDispatch({ type: "SET_TAGS", payload: newState });
       }
     },
     [tags]
   );
 
-  // form control
-  const onChange = (
+  const onChangeTags = (
     event: React.SyntheticEvent,
     value: string[],
     reason: AutocompleteChangeReason,
     details?: AutocompleteChangeDetails<string> | undefined
   ) => {
-    console.log("onChange: ", value);
-    setTags(value);
+    console.log("onChangeTags: ", value);
     datasets[pageIndex].caption.content = value.join(",");
-    setDatasets(datasets);
+    datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
+    tagEditorDispatch({ type: "SET_TAGS", payload: value });
   };
 
-  // shortcut settings
+  /* short cut keys */
   useHotkeys("ctrl+Enter", () => onSaveCaption());
   useHotkeys("ctrl+ArrowRight", () => nextDataset());
   useHotkeys("ctrl+ArrowLeft", () => prevDataset());
@@ -174,7 +188,6 @@ export function Editor() {
     const caption = tags.join(",");
     const result_write = await writable.write(caption);
     const result_close = await writable.close();
-    // FIXME: Check the return value type.
     if (result_write != null || result_close != null) {
       console.error("Caption cannot save");
       setOnSaveFailure(true);
@@ -183,8 +196,9 @@ export function Editor() {
     setOnSaveSuccess(true);
     console.info(`onSave: ${dataset.caption.name}`);
   }
+
+  /* page control */
   const pageChange = (index: number) => {
-    setTags(datasets[index].caption.content.split(","));
     navigate(`/edit/${index}`, { state: { id: index } });
   };
   let nextDataset = () => {
@@ -208,9 +222,6 @@ export function Editor() {
   };
   const pageChenger = (event: React.ChangeEvent<unknown>, value: number) => {
     const index = value - 1;
-    pageChange(pageIndex);
-  };
-  const pageChengerByImage = (event: MouseEvent, value: number) => {
     pageChange(pageIndex);
   };
 
@@ -272,7 +283,7 @@ export function Editor() {
                       </DndContext>
                     );
                   }}
-                  onChange={onChange}
+                  onChange={onChangeTags}
                 ></Autocomplete>
                 <Fab
                   aria-label="save"
