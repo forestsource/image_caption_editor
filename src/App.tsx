@@ -3,18 +3,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
+import { createTheme } from "@mui/material/styles";
+import Grid from "@mui/material/Unstable_Grid2";
+import Box from "@mui/material/Box";
 
 import { ListDirectory } from "./list";
 import { Editor } from "./editor";
 import { Dataset } from "./types";
-import "./App.css";
-
-//font
-import "@fontsource/roboto/300.css";
-import "@fontsource/roboto/400.css";
-import "@fontsource/roboto/500.css";
-import "@fontsource/roboto/700.css";
+import { Sidebar } from "./sidebar";
 
 export const DatasetsContext = React.createContext(
   {} as {
@@ -26,27 +22,45 @@ export const DatasetsContext = React.createContext(
 function App() {
   const emptyDataset: Dataset[] = [];
   const [datasets, setDatasets] = useState(emptyDataset);
+  const [darkMode, setDarkMode] = useState(false);
+
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+    },
+  });
+
   return (
-    <div className="App">
-      <header className="">
-        <meta httpEquiv="Pragma" content="no-cache" />
-        <meta httpEquiv="Cache-Control" content="no-cache" />
-        <meta httpEquiv="Expires" content="0" />
-      </header>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Container sx={{ backgroundColor: "secondary.main", height: "100vh" }}>
-          <BrowserRouter>
-            <DatasetsContext.Provider value={{ datasets, setDatasets }}>
-              <Routes>
-                <Route path="/" element={<ListDirectory />} />
-                <Route path="/edit/:pageId" element={<Editor />} />
-              </Routes>
-            </DatasetsContext.Provider>
-          </BrowserRouter>
-        </Container>
-      </ThemeProvider>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container
+        disableGutters
+        maxWidth={false}
+        sx={{
+          backgroundColor: "background.default",
+          paddingTop: "1em",
+          height: "100vh",
+        }}
+      >
+        <BrowserRouter>
+          <DatasetsContext.Provider value={{ datasets, setDatasets }}>
+            <Grid container>
+              <Grid xs={3} id="sidebar-before-grid">
+                <Box>
+                  <Sidebar />
+                </Box>
+              </Grid>
+              <Grid xs={9} sx={{ backgroundColor: "blue" }}>
+                <Routes>
+                  <Route path="/" element={<ListDirectory />} />
+                  <Route path="/edit/:pageId" element={<Editor />} />
+                </Routes>
+              </Grid>
+            </Grid>
+          </DatasetsContext.Provider>
+        </BrowserRouter>
+      </Container>
+    </ThemeProvider>
   );
 }
 
