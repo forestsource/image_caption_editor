@@ -203,10 +203,10 @@ export function Editor() {
     let fuzzySearch = suggestionTags.filter((suggestionTag) => {
       return suggestionTag.destabilizedTags.includes(state.inputValue);
     });
-    let exactMatch = suggestionTags.filter((suggestionTag) => {
+    let partialMatch = suggestionTags.filter((suggestionTag) => {
       return suggestionTag.normalizedTag.includes(state.inputValue);
     });
-    let result = fuzzySearch.concat(exactMatch);
+    let result = fuzzySearch.concat(partialMatch);
     return result.map((suggestionTag) => suggestionTag.normalizedTag);
   };
 
