@@ -9,6 +9,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BurstModeIcon from "@mui/icons-material/BurstMode";
@@ -33,21 +36,50 @@ let filenameWithoutExtention = (path: string) => {
 export function Sidebar() {
   const { state, dispatch } = useContext(DatasetsContext);
   const datasets = state.datasets;
-  let [tags, setTags] = React.useState<string[]>([]);
+  const [onPageInfo, setOnPageInfo] = React.useState(false);
+  const [pageInfoMsg, setPageInfoMsg] = React.useState("");
+
+  const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOnPageInfo(false);
+  };
 
   async function verifyPermission() {
     console.debug("verifyPermission");
     let dirHandle = await IDAget("dir");
-    if (dirHandle != undefined) {
+    if (dirHandle !== undefined) {
       let permission = await dirHandle.queryPermission({ mode: "readwrite" });
       if (permission !== "granted") {
-        permission = await dirHandle.requestPermission({ mode: "readwrite" });
+        try {
+          permission = await dirHandle.requestPermission({ mode: "readwrite" });
+        } catch (e) {
+          console.warn("Cannot get access permission", e);
+          setPageInfoMsg("You need to allow access to the directory.");
+          setOnPageInfo(true);
+          return;
+        }
         if (permission !== "granted") {
-          dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+          try {
+            dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+          } catch (e) {
+            console.info("Cancel directory pickup", e);
+            setPageInfoMsg("Directory not selected.");
+            setOnPageInfo(true);
+            return;
+          }
         }
       }
     } else {
-      dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+      try {
+        dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+      } catch (e) {
+        console.info("Cancel directory pickup", e);
+        setPageInfoMsg("Directory not selected.");
+        setOnPageInfo(true);
+        return;
+      }
     }
     await createDataset(dirHandle);
     // await IDAset("dir", dirHandle);
@@ -173,6 +205,12 @@ export function Sidebar() {
           ))}
         </ImageList>
       </Drawer>
+      <Snackbar open={onPageInfo} autoHideDuration={3000} onClose={snackClose}>
+        <Alert onClose={snackClose} severity="info" sx={{ width: "100%" }}>
+          {" "}
+          {pageInfoMsg}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 }
