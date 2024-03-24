@@ -56,7 +56,14 @@ export function ListDirectory() {
               <Card
                 key={index}
                 onClick={() => navigate(`/edit/${index}`)}
-                sx={{}}
+                sx={{
+                  transition: "transform 0.3s",
+                  "&:hover": {
+                    opacity: [0.9, 0.8, 0.7],
+                    cursor: "pointer",
+                    transform: "scale(1.05)",
+                  },
+                }}
               >
                 <CardMedia
                   component="img"
@@ -64,7 +71,7 @@ export function ListDirectory() {
                   sx={{ objectFit: "cover" }}
                 />
                 <CardContent>
-                  <Typography>{dataset.caption.content}</Typography>
+                  <Typography>{dataset.caption.content.join(", ")}</Typography>
                 </CardContent>
               </Card>
             ))}

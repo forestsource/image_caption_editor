@@ -1,6 +1,4 @@
 import React, { useEffect, useContext, useCallback } from "react";
-
-import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { FilterOptionsState } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -22,6 +20,8 @@ import Autocomplete, {
 } from "@mui/material/Autocomplete";
 import { useHotkeys } from "react-hotkeys-hook";
 import Papa from "papaparse";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 import "./App.css";
 import type { Dataset, suggestionTags } from "./types";
@@ -54,6 +54,7 @@ interface SortableItemProps {
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
 export function Editor() {
+  const theme = useTheme();
   const { state: datasetsState, dispatch: datasetsDispatch } =
     useContext(DatasetsContext);
   const { state: tagEditorState, dispatch: tagEditorDispatch } =
@@ -136,6 +137,14 @@ export function Editor() {
           {...listeners}
           color="primary"
           onDelete={onDeleteTag}
+          sx={{
+            margin: "0.1em",
+            transition: "transform 0.3s",
+            "&:hover": {
+              cursor: "pointer",
+              opacity: [0.1, 0.1, 0.1],
+            },
+          }}
         ></Chip>
       </div>
     );

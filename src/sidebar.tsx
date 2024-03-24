@@ -216,11 +216,12 @@ export function Sidebar() {
             <ImageListItem
               key={dataset.image.uri}
               sx={{
+                transition: "transform 0.3s",
                 "&:hover": {
-                  // backgroundColor: 'primary.main',
                   opacity: [0.9, 0.8, 0.7],
                   boxShadow: 2,
                   cursor: "pointer",
+                  transform: "scale(1.05)",
                 },
               }}
             >
