@@ -180,7 +180,12 @@ export function Sidebar() {
               <ListItemIcon>
                 <BurstModeIcon />
               </ListItemIcon>
-              <ListItemText primary="Batch Edit" />
+              <ListItemText
+                primary="Batch Edit"
+                onClick={() => {
+                  navigate("/batchEdit");
+                }}
+              />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -188,7 +193,12 @@ export function Sidebar() {
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText primary="Settings" />
+              <ListItemText
+                primary="Settings"
+                onClick={() => {
+                  navigate("/settings");
+                }}
+              />
             </ListItemButton>
           </ListItem>
         </List>

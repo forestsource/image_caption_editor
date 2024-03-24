@@ -9,6 +9,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import { ListDirectory } from "./list";
 import { Editor } from "./editor";
 import { Sidebar } from "./sidebar";
+import { BatchEditor } from "./BatchEditor";
 import { DatasetsProvider } from "./Contexts/DatasetsContext";
 import { TagEditorProvider } from "./Contexts/TagEditorContext";
 
@@ -44,6 +45,7 @@ function App() {
                   <Routes>
                     <Route path="/" element={<ListDirectory />} />
                     <Route path="/edit/:pageId" element={<Editor />} />
+                    <Route path="/batchEdit" element={<BatchEditor />} />
                   </Routes>
                 </Grid>
               </Grid>
