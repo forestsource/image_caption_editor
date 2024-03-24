@@ -9,6 +9,15 @@ import SaveIcon from "@mui/icons-material/Save";
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 import { TopNTags } from "./TopNTags";
 
+const isValidRegex = (userInput: string): boolean => {
+  try {
+    new RegExp(userInput);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
 export function BatchEditor() {
   const { state, dispatch } = useContext(DatasetsContext);
   const datasets = state.datasets;
@@ -20,7 +29,13 @@ export function BatchEditor() {
     if (filter === "" || filter === undefined) {
       return allTags;
     }
-    return allTags.filter((tag) => tag.includes(filter));
+    if (!isValidRegex(filter)) {
+      return [];
+    }
+    const regex = new RegExp(filter, "i");
+    return allTags.filter((tag) => {
+      return tag.match(regex);
+    });
   };
   const handleDelete = (tag: string) => () => {
     dispatch({ type: "REMOVE_CAPTION_TAG", payload: tag });
