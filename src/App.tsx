@@ -40,7 +40,7 @@ function App() {
                 <Grid xs={3} id="sidebar-before-grid">
                   <Sidebar />
                 </Grid>
-                <Grid xs={9} sx={{ backgroundColor: "blue" }}>
+                <Grid xs={9}>
                   <Routes>
                     <Route path="/" element={<ListDirectory />} />
                     <Route path="/edit/:pageId" element={<Editor />} />

@@ -46,6 +46,7 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Margin } from "@mui/icons-material";
 
 interface TagSuggestion {
   label: string;
@@ -238,87 +239,77 @@ export function Editor() {
 
   return (
     <Box>
-      <Box sx={{ backgroundColor: "background.default" }}>
+      <Box sx={{ margin: "1rem" }}>
         <Breadcrumbs sx={{ maxHeight: "5%" }} aria-label="breadcrumb">
-          <Link to="/" component={RouterLink} underline="hover" color="inherit">
-            <Typography>Top</Typography>
-          </Link>
-          <Typography>{`image${pageIndex + 1}`}</Typography>
+          <Typography>{datasets[pageIndex].image.name}</Typography>
         </Breadcrumbs>
-        <Grid container spacing={1}>
-          <Grid xs={2}>
-            <Card></Card>
-          </Grid>
-          <Grid xs={10}>
-            <Card>
-              <CardMedia
-                component="img"
-                image={dataset.image.uri}
-                sx={{ maxHeight: "40vh", mx: "auto", objectFit: "contain" }}
-              />
-              <CardContent>
-                <Autocomplete
-                  freeSolo
-                  multiple
-                  filterOptions={optionFilter}
-                  filterSelectedOptions
-                  id="tag-field"
-                  value={tags}
-                  options={TagSuggestionTags}
-                  getOptionLabel={(option) => option}
-                  sx={{ maxHeight: 1 / 1, maxWidth: 1 / 1 }}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Tags" variant="filled" />
-                  )}
-                  renderTags={(tagValue, getTagProps) => {
-                    return (
-                      <DndContext
-                        collisionDetection={closestCenter}
-                        sensors={sensors}
-                        onDragEnd={onDragEnd}
-                      >
-                        <SortableContext
-                          items={tagValue}
-                          strategy={rectSortingStrategy}
-                        >
-                          <>
-                            {tagValue.map((tag, index) => (
-                              <SortableItem
-                                {...getTagProps({ index })}
-                                key={tag}
-                                id={tag}
-                                label={tag}
-                                data-dndkit-disabled-dnd-flag="true"
-                              />
-                            ))}
-                          </>
-                        </SortableContext>
-                      </DndContext>
-                    );
-                  }}
-                  onChange={onChangeTags}
-                ></Autocomplete>
-                <Fab
-                  aria-label="save"
-                  color="primary"
-                  variant="extended"
-                  onClick={onSaveCaption}
-                  sx={{ margin: 1 }}
-                >
-                  <SaveIcon sx={{ mr: 1 }} /> Save
-                </Fab>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-        <Box justifyContent="center" alignContent="center" display="flex">
-          <Pagination
-            count={datasets.length}
-            page={pageIndex + 1}
-            siblingCount={3}
-            onChange={pageChenger}
+        <Card>
+          <CardMedia
+            component="img"
+            image={dataset.image.uri}
+            sx={{ maxHeight: "40vh", mx: "auto", objectFit: "contain" }}
           />
-        </Box>
+          <CardContent>
+            <Autocomplete
+              freeSolo
+              multiple
+              filterOptions={optionFilter}
+              filterSelectedOptions
+              id="tag-field"
+              value={tags}
+              options={TagSuggestionTags}
+              getOptionLabel={(option) => option}
+              sx={{ maxHeight: 1 / 1, maxWidth: 1 / 1 }}
+              renderInput={(params) => (
+                <TextField {...params} label="Tags" variant="filled" />
+              )}
+              renderTags={(tagValue, getTagProps) => {
+                return (
+                  <DndContext
+                    collisionDetection={closestCenter}
+                    sensors={sensors}
+                    onDragEnd={onDragEnd}
+                  >
+                    <SortableContext
+                      items={tagValue}
+                      strategy={rectSortingStrategy}
+                    >
+                      <>
+                        {tagValue.map((tag, index) => (
+                          <SortableItem
+                            {...getTagProps({ index })}
+                            key={tag}
+                            id={tag}
+                            label={tag}
+                            data-dndkit-disabled-dnd-flag="true"
+                          />
+                        ))}
+                      </>
+                    </SortableContext>
+                  </DndContext>
+                );
+              }}
+              onChange={onChangeTags}
+            ></Autocomplete>
+            <Fab
+              aria-label="save"
+              color="primary"
+              variant="extended"
+              onClick={onSaveCaption}
+              sx={{ margin: 1 }}
+            >
+              <SaveIcon sx={{ mr: 1 }} /> Save
+            </Fab>
+          </CardContent>
+        </Card>
+      </Box>
+      <Box justifyContent="center" alignContent="center" display="flex">
+        <Pagination
+          count={datasets.length}
+          page={pageIndex + 1}
+          siblingCount={3}
+          onChange={pageChenger}
+        />
       </Box>
       <Snackbar
         open={onSaveSuccess}

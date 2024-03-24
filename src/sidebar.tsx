@@ -11,6 +11,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
+import ListIcon from "@mui/icons-material/List";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -159,6 +160,19 @@ export function Sidebar() {
                 <FileUploadIcon />
               </ListItemIcon>
               <ListItemText primary="Load Dataset" onClick={verifyPermission} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary="List"
+                onClick={() => {
+                  navigate("/");
+                }}
+              />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
