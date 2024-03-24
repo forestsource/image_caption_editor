@@ -7,9 +7,11 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/Inbox";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import SettingsIcon from "@mui/icons-material/Settings";
+import BurstModeIcon from "@mui/icons-material/BurstMode";
 
 import { get as IDAget, set as IDAset } from "idb-keyval";
 import type { Image, Caption, Dataset } from "./types";
@@ -122,17 +124,25 @@ export function Sidebar() {
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <InboxIcon />
+                <FileUploadIcon />
               </ListItemIcon>
-              <ListItemText primary="Load Image" onClick={verifyPermission} />
+              <ListItemText primary="Load Dataset" onClick={verifyPermission} />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
-                <InboxIcon />
+                <BurstModeIcon />
               </ListItemIcon>
-              <ListItemText primary="Drafts" />
+              <ListItemText primary="Batch Edit" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
             </ListItemButton>
           </ListItem>
         </List>
