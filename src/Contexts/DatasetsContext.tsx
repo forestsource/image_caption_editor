@@ -72,7 +72,6 @@ const datasetsReducer = (
         if (result_write != null || result_close != null) {
           console.error("Caption cannot save");
         }
-        console.debug("Caption saved", captionStr);
       };
       saveCaption();
       return { ...state };

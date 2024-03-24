@@ -5,9 +5,10 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Fab from "@mui/material/Fab";
 import SaveIcon from "@mui/icons-material/Save";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 import { DatasetsContext } from "./Contexts/DatasetsContext";
-import { TopNTags } from "./TopNTags";
 
 const isValidRegex = (userInput: string): boolean => {
   try {
@@ -24,6 +25,8 @@ export function EditAllTags() {
   const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
   const allTags = Array.from(new Set(flatTags));
   const [filter, setFilter] = React.useState<string>("");
+  const [onSaveSuccess, setOnSaveSuccess] = React.useState(false);
+  const [onSaveFailure, setOnSaveFailure] = React.useState(false);
 
   const filterdTags = () => {
     if (filter === "" || filter === undefined) {
@@ -45,6 +48,15 @@ export function EditAllTags() {
     datasets.forEach((dataset) => {
       dispatch({ type: "SAVE_CAPTION", payload: dataset });
     });
+    setOnSaveSuccess(true);
+  };
+
+  const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOnSaveSuccess(false);
+    setOnSaveFailure(false);
   };
 
   return (
@@ -85,6 +97,16 @@ export function EditAllTags() {
           />
         ))}
       </Box>
+      <Snackbar
+        open={onSaveSuccess}
+        autoHideDuration={2000}
+        onClose={snackClose}
+      >
+        <Alert onClose={snackClose} severity="success" sx={{ width: "100%" }}>
+          {" "}
+          Save Success
+        </Alert>
+      </Snackbar>
     </Paper>
   );
 }
