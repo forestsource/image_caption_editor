@@ -16,3 +16,8 @@ export interface Dataset {
   caption: Caption;
   dirHandle: FileSystemDirectoryHandle;
 }
+
+export interface suggestionTags {
+  normalizedTag: string;
+  destabilizedTags: string[];
+}

@@ -10,10 +10,8 @@ import Chip from "@mui/material/Chip";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Fab from "@mui/material/Fab";
 import SaveIcon from "@mui/icons-material/Save";
@@ -23,9 +21,10 @@ import Autocomplete, {
   AutocompleteChangeDetails,
 } from "@mui/material/Autocomplete";
 import { useHotkeys } from "react-hotkeys-hook";
+import Papa from "papaparse";
 
 import "./App.css";
-import type { Dataset } from "./types";
+import type { Dataset, suggestionTags } from "./types";
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 import { TagEditorContext } from "./Contexts/TagEditorContext";
 
@@ -46,12 +45,6 @@ import {
   arrayMove,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Margin } from "@mui/icons-material";
-
-interface TagSuggestion {
-  label: string;
-  value: string;
-}
 
 interface SortableItemProps {
   id: string;
@@ -81,6 +74,10 @@ export function Editor() {
   const [onSaveFailure, setOnSaveFailure] = React.useState(false);
   const [onPageInfo, setOnPageInfo] = React.useState(false);
   const [pageInfoMsg, setPageInfoMsg] = React.useState("");
+  const [suggestionTags, setSuggestionTags] = React.useState<suggestionTags[]>(
+    []
+  );
+  loadSuggestionTags();
 
   // Change tags when page changes
   useEffect(() => {
@@ -90,8 +87,27 @@ export function Editor() {
     });
   }, [pageIndex]);
 
-  // TODO: make suggest from file
-  const TagSuggestionTags = ["black", "white", "hat", ":D", "1girl", "smile"];
+  async function loadSuggestionTags() {
+    const response = await fetch(process.env.PUBLIC_URL + "/danbooru.csv");
+    const csvData = await response.text();
+    const parsedCsvData = Papa.parse(csvData, {
+      header: false,
+      dynamicTyping: false,
+    });
+    const results: string[][] = parsedCsvData.data as any[][];
+    let suggestionTags: suggestionTags[] = [];
+    results.forEach((result) => {
+      let destabilizedTag: string[] = [];
+      if (result[3] !== undefined) {
+        destabilizedTag = result[3].split(",");
+      }
+      suggestionTags.push({
+        normalizedTag: result[0],
+        destabilizedTags: destabilizedTag,
+      });
+    });
+    setSuggestionTags(suggestionTags);
+  }
 
   const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === "clickaway") {
@@ -105,7 +121,7 @@ export function Editor() {
   /* For DnD */
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
-      distance: 5,
+      distance: 7,
     },
   });
   const sensors = useSensors(pointerSensor);
@@ -175,6 +191,8 @@ export function Editor() {
     datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
     tagEditorDispatch({ type: "SET_TAGS", payload: newTags });
   };
+
+  /* Autocomplete filter */
   const optionFilter = (
     options: string[],
     state: FilterOptionsState<string>
@@ -182,7 +200,14 @@ export function Editor() {
     if (state.inputValue.length <= INPUT_LENGTH_ENABLE_AUTOCOMPLETE) {
       return [];
     }
-    return options.filter((option) => option.includes(state.inputValue));
+    let fuzzySearch = suggestionTags.filter((suggestionTag) => {
+      return suggestionTag.destabilizedTags.includes(state.inputValue);
+    });
+    let exactMatch = suggestionTags.filter((suggestionTag) => {
+      return suggestionTag.normalizedTag.includes(state.inputValue);
+    });
+    let result = fuzzySearch.concat(exactMatch);
+    return result.map((suggestionTag) => suggestionTag.normalizedTag);
   };
 
   /* shortcut keys */
@@ -240,7 +265,7 @@ export function Editor() {
   return (
     <Box>
       <Box sx={{ margin: "1rem" }}>
-        <Breadcrumbs sx={{ maxHeight: "5%" }} aria-label="breadcrumb">
+        <Breadcrumbs aria-label="breadcrumb">
           <Typography>{datasets[pageIndex].image.name}</Typography>
         </Breadcrumbs>
         <Card>
@@ -257,7 +282,7 @@ export function Editor() {
               filterSelectedOptions
               id="tag-field"
               value={tags}
-              options={TagSuggestionTags}
+              options={[]}
               getOptionLabel={(option) => option}
               sx={{ maxHeight: 1 / 1, maxWidth: 1 / 1 }}
               renderInput={(params) => (
