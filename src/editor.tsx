@@ -247,14 +247,19 @@ export function Editor() {
   return (
     <Box>
       <Box sx={{ margin: "1rem" }}>
-        <Breadcrumbs aria-label="breadcrumb">
+        <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "1em" }}>
           <Typography>{datasets[pageIndex].image.name}</Typography>
         </Breadcrumbs>
         <Card>
           <CardMedia
             component="img"
             image={dataset.image.uri}
-            sx={{ maxHeight: "40vh", mx: "auto", objectFit: "contain" }}
+            sx={{
+              minHeight: "40vh",
+              maxHeight: "40vh",
+              mx: "auto",
+              objectFit: "contain",
+            }}
           />
           <CardContent>
             <Autocomplete
@@ -298,19 +303,30 @@ export function Editor() {
               }}
               onChange={onChangeTags}
             ></Autocomplete>
-            <Fab
-              aria-label="save"
-              color="primary"
-              variant="extended"
-              onClick={onSaveCaption}
-              sx={{ margin: 1 }}
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{ margin: "1em" }}
             >
-              <SaveIcon sx={{ mr: 1 }} /> Save
-            </Fab>
+              <Fab
+                aria-label="save"
+                color="primary"
+                variant="extended"
+                onClick={onSaveCaption}
+              >
+                <SaveIcon sx={{ mr: 1 }} /> Save
+              </Fab>
+            </Box>
           </CardContent>
         </Card>
       </Box>
-      <Box justifyContent="center" alignContent="center" display="flex">
+      <Box
+        id="pagination-box"
+        justifyContent="center"
+        display="flex"
+        sx={{ position: "fixed", bottom: "1em", width: "80%" }}
+      >
         <Pagination
           count={datasets.length}
           page={pageIndex + 1}
