@@ -5,8 +5,10 @@ import React, {
   useCallback,
   ReactElement,
 } from "react";
+import type { MouseEvent, KeyboardEvent } from "react";
+
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { Button } from "@mui/material";
+import { FilterOptionsState } from "@mui/material";
 import { useParams } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
@@ -44,11 +46,13 @@ import {
   useSensor,
   useSensors,
   PointerSensor,
+  MouseSensor,
   KeyboardSensor,
   DragStartEvent,
   DragEndEvent,
   closestCenter,
 } from "@dnd-kit/core";
+
 import {
   SortableContext,
   sortableKeyboardCoordinates,
@@ -65,18 +69,19 @@ interface TagSuggestion {
 
 interface SortableItemProps {
   id: string;
-  children: ReactElement;
+  label: string;
 }
 
-const parseTags = (tags: string): string[] => {
-  if (tags === "" || tags === undefined) {
+const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
+
+const tagSplitter = (tags: string): string[] => {
+  if (tags === "") {
     return [];
   }
   return tags.split(",");
 };
 
 export function Editor() {
-  const navigate = useNavigate();
   const { state: datasetsState, dispatch: datasetsDispatch } =
     useContext(DatasetsContext);
   const { state: tagEditorState, dispatch: tagEditorDispatch } =
@@ -95,7 +100,7 @@ export function Editor() {
   useEffect(() => {
     tagEditorDispatch({
       type: "SET_TAGS",
-      payload: datasets[pageIndex].caption.content.split(","),
+      payload: tagSplitter(datasets[pageIndex].caption.content),
     });
   }, [pageIndex]);
 
@@ -112,13 +117,13 @@ export function Editor() {
   };
 
   /* For DnD */
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
-  function SortableItem({ id, children }: SortableItemProps) {
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 5,
+    },
+  });
+  const sensors = useSensors(pointerSensor);
+  function SortableItem({ id, label }: SortableItemProps) {
     const { attributes, listeners, setNodeRef, transform, transition } =
       useSortable({ id });
     const style = {
@@ -130,11 +135,12 @@ export function Editor() {
         <Chip
           ref={setNodeRef}
           style={style}
+          variant="outlined"
+          label={label}
           {...attributes}
           {...listeners}
-          label={children.props.label}
+          onDelete={onDeleteTag}
         ></Chip>
-        <ClearIcon />
       </div>
     );
   }
@@ -174,8 +180,26 @@ export function Editor() {
     datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
     tagEditorDispatch({ type: "SET_TAGS", payload: value });
   };
+  const onDeleteTag = (event: React.MouseEvent) => {
+    const target = event.currentTarget;
+    const tag = target.parentElement?.textContent;
+    console.debug("onDeleteTag: ", tag);
+    const newTags = tags.filter((item) => item !== tag);
+    datasets[pageIndex].caption.content = newTags.join(",");
+    datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
+    tagEditorDispatch({ type: "SET_TAGS", payload: newTags });
+  };
+  const optionFilter = (
+    options: string[],
+    state: FilterOptionsState<string>
+  ): string[] => {
+    if (state.inputValue.length <= INPUT_LENGTH_ENABLE_AUTOCOMPLETE) {
+      return [];
+    }
+    return options.filter((option) => option.includes(state.inputValue));
+  };
 
-  /* short cut keys */
+  /* shortcut keys */
   useHotkeys("ctrl+Enter", () => onSaveCaption());
   useHotkeys("ctrl+ArrowRight", () => nextDataset());
   useHotkeys("ctrl+ArrowLeft", () => prevDataset());
@@ -198,7 +222,9 @@ export function Editor() {
   }
 
   /* page control */
+  const navigate = useNavigate();
   const pageChange = (index: number) => {
+    console.debug("pageChange: ", index);
     navigate(`/edit/${index}`, { state: { id: index } });
   };
   let nextDataset = () => {
@@ -222,7 +248,7 @@ export function Editor() {
   };
   const pageChenger = (event: React.ChangeEvent<unknown>, value: number) => {
     const index = value - 1;
-    pageChange(pageIndex);
+    pageChange(index);
   };
 
   return (
@@ -249,6 +275,7 @@ export function Editor() {
                 <Autocomplete
                   freeSolo
                   multiple
+                  filterOptions={optionFilter}
                   filterSelectedOptions
                   id="tag-field"
                   value={tags}
@@ -271,12 +298,13 @@ export function Editor() {
                         >
                           <>
                             {tagValue.map((tag, index) => (
-                              <SortableItem key={tag} id={tag}>
-                                <Chip
-                                  label={tag}
-                                  {...getTagProps({ index })}
-                                ></Chip>
-                              </SortableItem>
+                              <SortableItem
+                                {...getTagProps({ index })}
+                                key={tag}
+                                id={tag}
+                                label={tag}
+                                data-dndkit-disabled-dnd-flag="true"
+                              />
                             ))}
                           </>
                         </SortableContext>
@@ -302,6 +330,7 @@ export function Editor() {
           <Pagination
             count={datasets.length}
             page={pageIndex + 1}
+            siblingCount={3}
             onChange={pageChenger}
           />
         </Box>

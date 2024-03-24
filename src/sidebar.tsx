@@ -99,17 +99,9 @@ export function Sidebar() {
   }
 
   const navigate = useNavigate();
-  let { pageId } = useParams();
-  let pageIndex: number = parseInt(pageId!);
-  let dataset: Dataset = datasets[pageIndex];
   const pageChange = (index: number) => {
     console.debug("pageChange: ", index);
-    // setTags(tagsFromString(datasets[index].caption.content));
     navigate(`/edit/${index}`, { state: { id: index } });
-  };
-  const pageChenger = (event: React.ChangeEvent<unknown>, value: number) => {
-    const index = value - 1;
-    pageChange(pageIndex);
   };
 
   return (
