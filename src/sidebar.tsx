@@ -90,7 +90,7 @@ export function Sidebar() {
     if (tags === "") {
       return [];
     }
-    return tags.split(",");
+    return tags.split(",").map((tag) => tag.trim());
   };
 
   async function createDataset(dirHandle: FileSystemDirectoryHandle) {
