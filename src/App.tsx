@@ -1,23 +1,18 @@
-import React, { createContext, useCallback, useState } from "react";
+import { useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Unstable_Grid2";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 
 import { ListDirectory } from "./list";
 import { Editor } from "./editor";
-import { Dataset } from "./types";
 import { Sidebar } from "./sidebar";
 import { DatasetsProvider } from "./Contexts/DatasetsContext";
 import { TagEditorProvider } from "./Contexts/TagEditorContext";
 
 function App() {
-  const emptyDataset: Dataset[] = [];
-  const [datasets, setDatasets] = useState(emptyDataset);
   const [darkMode, setDarkMode] = useState(false);
 
   const theme = createTheme({

@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useContext,
-  useCallback,
-  ReactElement,
-} from "react";
-import type { MouseEvent, KeyboardEvent } from "react";
+import React, { useEffect, useContext, useCallback } from "react";
 
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { FilterOptionsState } from "@mui/material";
@@ -24,10 +17,7 @@ import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import Fab from "@mui/material/Fab";
 import SaveIcon from "@mui/icons-material/Save";
-import ClearIcon from "@mui/icons-material/Clear";
 import Pagination from "@mui/material/Pagination";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
 import Autocomplete, {
   AutocompleteChangeReason,
   AutocompleteChangeDetails,
@@ -42,20 +32,15 @@ import { TagEditorContext } from "./Contexts/TagEditorContext";
 // DnD
 import {
   DndContext,
-  UniqueIdentifier,
   useSensor,
   useSensors,
   PointerSensor,
-  MouseSensor,
-  KeyboardSensor,
-  DragStartEvent,
   DragEndEvent,
   closestCenter,
 } from "@dnd-kit/core";
 
 import {
   SortableContext,
-  sortableKeyboardCoordinates,
   rectSortingStrategy,
   useSortable,
   arrayMove,
