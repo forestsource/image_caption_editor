@@ -18,7 +18,7 @@ interface statics {
   usageRatio: number;
 }
 
-const TOP_N_TAGS = 10;
+const TOP_N_TAGS = 25;
 
 export function TopNTags() {
   const { state, dispatch } = useContext(DatasetsContext);
@@ -43,17 +43,19 @@ export function TopNTags() {
     .slice(0, TOP_N_TAGS);
 
   return (
-    <ResponsiveContainer width="100%" height={500}>
-      <BarChart layout="vertical" data={topNTags}>
-        <CartesianGrid strokeDasharray="3 3" strokeWidth={0.5} />
-        <XAxis
-          type="number"
-          domain={[0, 100]}
-          padding={{ left: 10, right: 10 }}
-        />
-        <YAxis dataKey="tagName" type="category" interval={0} />
-        <Bar dataKey="usageRatio" fill="#8884d8" />
-      </BarChart>
-    </ResponsiveContainer>
+    <Box sx={{ margin: "1em" }}>
+      <ResponsiveContainer height={1000}>
+        <BarChart layout="vertical" data={topNTags}>
+          <CartesianGrid strokeDasharray="3 3" strokeWidth={0.5} />
+          <XAxis
+            type="number"
+            domain={[0, 100]}
+            padding={{ left: 10, right: 10 }}
+          />
+          <YAxis dataKey="tagName" type="category" interval={0} />
+          <Bar dataKey="usageRatio" fill="#8884d8" />
+        </BarChart>
+      </ResponsiveContainer>
+    </Box>
   );
 }
