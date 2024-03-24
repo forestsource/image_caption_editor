@@ -134,6 +134,7 @@ export function Editor() {
           label={label}
           {...attributes}
           {...listeners}
+          color="primary"
           onDelete={onDeleteTag}
         ></Chip>
       </div>
@@ -208,19 +209,7 @@ export function Editor() {
   useHotkeys("ctrl+ArrowRight", () => nextDataset());
   useHotkeys("ctrl+ArrowLeft", () => prevDataset());
   async function onSaveCaption() {
-    const fileHandle = await dataset.dirHandle.getFileHandle(
-      dataset.caption.name,
-      { create: true }
-    );
-    const writable = await fileHandle.createWritable();
-    const caption = tags.join(",");
-    const result_write = await writable.write(caption);
-    const result_close = await writable.close();
-    if (result_write != null || result_close != null) {
-      console.error("Caption cannot save");
-      setOnSaveFailure(true);
-      return;
-    }
+    datasetsDispatch({ type: "SAVE_CAPTION", payload: dataset });
     setOnSaveSuccess(true);
     console.info(`onSave: ${dataset.caption.name}`);
   }
