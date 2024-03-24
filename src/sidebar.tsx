@@ -12,6 +12,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import ListIcon from "@mui/icons-material/List";
+import Divider from "@mui/material/Divider";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -208,6 +209,7 @@ export function Sidebar() {
             </ListItemButton>
           </ListItem>
         </List>
+        <Divider />
 
         <ImageList sx={{ maxHeight: "80vh" }} cols={2} gap={4}>
           {datasets.map((dataset, index) => (
