@@ -53,13 +53,6 @@ interface SortableItemProps {
 
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
-const tagSplitter = (tags: string): string[] => {
-  if (tags === "") {
-    return [];
-  }
-  return tags.split(",");
-};
-
 export function Editor() {
   const { state: datasetsState, dispatch: datasetsDispatch } =
     useContext(DatasetsContext);
@@ -83,7 +76,7 @@ export function Editor() {
   useEffect(() => {
     tagEditorDispatch({
       type: "SET_TAGS",
-      payload: tagSplitter(datasets[pageIndex].caption.content),
+      payload: datasets[pageIndex].caption.content,
     });
   }, [pageIndex]);
 
@@ -178,7 +171,7 @@ export function Editor() {
     details?: AutocompleteChangeDetails<string> | undefined
   ) => {
     console.log("onChangeTags: ", value);
-    datasets[pageIndex].caption.content = value.join(",");
+    datasets[pageIndex].caption.content = value;
     datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
     tagEditorDispatch({ type: "SET_TAGS", payload: value });
   };
@@ -187,7 +180,7 @@ export function Editor() {
     const tag = target.parentElement?.textContent;
     console.debug("onDeleteTag: ", tag);
     const newTags = tags.filter((item) => item !== tag);
-    datasets[pageIndex].caption.content = newTags.join(",");
+    datasets[pageIndex].caption.content = newTags;
     datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
     tagEditorDispatch({ type: "SET_TAGS", payload: newTags });
   };

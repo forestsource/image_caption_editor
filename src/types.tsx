@@ -6,13 +6,12 @@ export interface Image {
 export interface Caption {
   name: string;
   uri: string;
-  content: string;
+  content: string[];
 }
 
 export interface Dataset {
   name: string;
   image: Image;
-  // caption: string
   caption: Caption;
   dirHandle: FileSystemDirectoryHandle;
 }

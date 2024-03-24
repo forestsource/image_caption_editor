@@ -85,6 +85,12 @@ export function Sidebar() {
     await createDataset(dirHandle);
     // await IDAset("dir", dirHandle);
   }
+  const tagSplitter = (tags: string): string[] => {
+    if (tags === "") {
+      return [];
+    }
+    return tags.split(",");
+  };
 
   async function createDataset(dirHandle: FileSystemDirectoryHandle) {
     console.debug("createDataset");
@@ -111,7 +117,7 @@ export function Sidebar() {
         const caption: Caption = {
           name: value.name,
           uri: file_uri,
-          content: await file.text(),
+          content: tagSplitter(await file.text()),
         };
         captions.push(caption);
       }
@@ -126,7 +132,7 @@ export function Sidebar() {
         datasets.push({ name: image.name, image, caption, dirHandle });
       } else {
         console.info("caption not found for image", image);
-        const caption: Caption = { name: image.name, uri: "", content: "" };
+        const caption: Caption = { name: image.name, uri: "", content: [] };
         datasets.push({ name: image.name, image, caption, dirHandle });
       }
     }

@@ -51,7 +51,7 @@ export function BatchEditor() {
     ) {
       return [];
     }
-    dataset.caption.content.split(",");
+    return [];
   });
 
   return (
