@@ -1,10 +1,7 @@
 import React, { useContext } from "react";
 import Box from "@mui/material/Box";
-import Chip from "@mui/material/Chip";
-import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
-import Fab from "@mui/material/Fab";
-import SaveIcon from "@mui/icons-material/Save";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 import { TopNTags } from "./TopNTags";
@@ -16,11 +13,20 @@ export function BatchEditor() {
   const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
   const allTags = Array.from(new Set(flatTags));
   const [filter, setFilter] = React.useState<string>("");
+  const [tabValue, setTabValue] = React.useState(0);
+
+  const handleTabChange = (event: React.ChangeEvent<{}>, newValue: number) => {
+    setTabValue(newValue);
+  };
 
   return (
     <Box>
-      <EditAllTags />
-      <TopNTags />
+      <Tabs value={tabValue} onChange={handleTabChange}>
+        <Tab label="Edit All Tags" />
+        <Tab label="Top N Tags" />
+      </Tabs>
+      {tabValue === 0 && <EditAllTags />}
+      {tabValue === 1 && <TopNTags />}
     </Box>
   );
 }

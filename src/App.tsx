@@ -10,6 +10,8 @@ import { ListDirectory } from "./list";
 import { Editor } from "./editor";
 import { Sidebar } from "./sidebar";
 import { BatchEditor } from "./BatchEditor";
+import { Settings } from "./Settings";
+import { ThemeContext } from "./Contexts/ThemeContext";
 import { DatasetsProvider } from "./Contexts/DatasetsContext";
 import { TagEditorProvider } from "./Contexts/TagEditorContext";
 
@@ -23,37 +25,40 @@ function App() {
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container
-        disableGutters
-        maxWidth={false}
-        sx={{
-          backgroundColor: "background.default",
-          paddingTop: "1em",
-          height: "100vh",
-        }}
-      >
-        <BrowserRouter>
-          <DatasetsProvider>
-            <TagEditorProvider>
-              <Grid container>
-                <Grid xs={3} id="sidebar-before-grid">
-                  <Sidebar />
+    <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container
+          disableGutters
+          maxWidth={false}
+          sx={{
+            backgroundColor: "background.default",
+            paddingTop: "1em",
+            height: "100vh",
+          }}
+        >
+          <BrowserRouter>
+            <DatasetsProvider>
+              <TagEditorProvider>
+                <Grid container>
+                  <Grid xs={3} id="sidebar-before-grid">
+                    <Sidebar />
+                  </Grid>
+                  <Grid xs={9}>
+                    <Routes>
+                      <Route path="/" element={<ListDirectory />} />
+                      <Route path="/edit/:pageId" element={<Editor />} />
+                      <Route path="/batchEdit" element={<BatchEditor />} />
+                      <Route path="/settings" element={<Settings />} />
+                    </Routes>
+                  </Grid>
                 </Grid>
-                <Grid xs={9}>
-                  <Routes>
-                    <Route path="/" element={<ListDirectory />} />
-                    <Route path="/edit/:pageId" element={<Editor />} />
-                    <Route path="/batchEdit" element={<BatchEditor />} />
-                  </Routes>
-                </Grid>
-              </Grid>
-            </TagEditorProvider>
-          </DatasetsProvider>
-        </BrowserRouter>
-      </Container>
-    </ThemeProvider>
+              </TagEditorProvider>
+            </DatasetsProvider>
+          </BrowserRouter>
+        </Container>
+      </ThemeProvider>
+    </ThemeContext.Provider>
   );
 }
 
