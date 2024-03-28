@@ -25,7 +25,7 @@ const isValidRegex = (userInput: string): boolean => {
   return true;
 };
 
-export function EditAllTags() {
+export function DeleteTags() {
   const { state, dispatch } = useContext(DatasetsContext);
   const { state: notificationsState, dispatch: notificationsDispatch } =
     useContext(NotificationsContext);

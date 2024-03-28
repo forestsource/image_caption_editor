@@ -292,6 +292,7 @@ export function Editor() {
               renderInput={(params) => (
                 <TextField {...params} label="Tags" variant="filled" />
               )}
+              onChange={onChangeTags}
               renderTags={(tagValue, getTagProps) => {
                 return (
                   <DndContext
@@ -318,7 +319,6 @@ export function Editor() {
                   </DndContext>
                 );
               }}
-              onChange={onChangeTags}
             ></Autocomplete>
             <Box
               display="flex"
