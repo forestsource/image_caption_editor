@@ -5,7 +5,6 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
-import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -27,6 +26,8 @@ import "./App.css";
 import type { Dataset, suggestionTags } from "./types";
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 import { TagEditorContext } from "./Contexts/TagEditorContext";
+import { NotificationsContext } from "./Contexts/NotificationsContext";
+import { Severity as sv } from "./types";
 
 // DnD
 import {
@@ -54,20 +55,17 @@ interface SortableItemProps {
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
 export function Editor() {
-  const theme = useTheme();
   const { state: datasetsState, dispatch: datasetsDispatch } =
     useContext(DatasetsContext);
   const { state: tagEditorState, dispatch: tagEditorDispatch } =
     useContext(TagEditorContext);
+  const { state: notificationsState, dispatch: notificationsDispatch } =
+    useContext(NotificationsContext);
   const datasets = datasetsState.datasets;
   let tags = tagEditorState.currentTags;
   let { pageId } = useParams();
   let pageIndex: number = parseInt(pageId!);
   let dataset: Dataset = datasets[pageIndex];
-  const [onSaveSuccess, setOnSaveSuccess] = React.useState(false);
-  const [onSaveFailure, setOnSaveFailure] = React.useState(false);
-  const [onPageInfo, setOnPageInfo] = React.useState(false);
-  const [pageInfoMsg, setPageInfoMsg] = React.useState("");
   const [suggestionTags, setSuggestionTags] = React.useState<suggestionTags[]>(
     []
   );
@@ -102,15 +100,6 @@ export function Editor() {
     });
     setSuggestionTags(suggestionTags);
   }
-
-  const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOnSaveSuccess(false);
-    setOnSaveFailure(false);
-    setOnPageInfo(false);
-  };
 
   /* For DnD */
   const pointerSensor = useSensor(PointerSensor, {
@@ -219,7 +208,10 @@ export function Editor() {
   useHotkeys("ctrl+ArrowLeft", () => prevDataset());
   async function onSaveCaption() {
     datasetsDispatch({ type: "SAVE_CAPTION", payload: dataset });
-    setOnSaveSuccess(true);
+    notificationsDispatch({
+      type: "NOTIFY",
+      payload: { open: true, msg: "Caption saved", severity: sv.SUCCESS },
+    });
     console.info(`onSave: ${dataset.caption.name}`);
   }
 
@@ -235,8 +227,10 @@ export function Editor() {
       console.info(pageId);
       pageChange(pageIndex);
     } else {
-      setPageInfoMsg("This page is last");
-      setOnPageInfo(true);
+      notificationsDispatch({
+        type: "NOTIFY",
+        payload: { open: true, msg: "This page is last", severity: sv.INFO },
+      });
     }
   };
   let prevDataset = () => {
@@ -244,8 +238,10 @@ export function Editor() {
       pageIndex--;
       pageChange(pageIndex);
     } else {
-      setPageInfoMsg("This page is first");
-      setOnPageInfo(true);
+      notificationsDispatch({
+        type: "NOTIFY",
+        payload: { open: true, msg: "This page is first", severity: sv.INFO },
+      });
     }
   };
   const pageChenger = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -343,32 +339,6 @@ export function Editor() {
           onChange={pageChenger}
         />
       </Box>
-      <Snackbar
-        open={onSaveSuccess}
-        autoHideDuration={2000}
-        onClose={snackClose}
-      >
-        <Alert onClose={snackClose} severity="success" sx={{ width: "100%" }}>
-          {" "}
-          Save Success
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={onSaveFailure}
-        autoHideDuration={3000}
-        onClose={snackClose}
-      >
-        <Alert onClose={snackClose} severity="error" sx={{ width: "100%" }}>
-          {" "}
-          Save Failure
-        </Alert>
-      </Snackbar>
-      <Snackbar open={onPageInfo} autoHideDuration={3000} onClose={snackClose}>
-        <Alert onClose={snackClose} severity="info" sx={{ width: "100%" }}>
-          {" "}
-          {pageInfoMsg}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

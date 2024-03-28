@@ -8,7 +8,6 @@ import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
-import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 import { Typography } from "@mui/material";
@@ -19,6 +18,8 @@ import AbcIcon from "@mui/icons-material/Abc";
 import SellIcon from "@mui/icons-material/Sell";
 
 import { DatasetsContext } from "./Contexts/DatasetsContext";
+import { NotificationsContext } from "./Contexts/NotificationsContext";
+import { Severity as sv } from "./types";
 
 function processStringWithRegex(str: string, regexInput: string): string {
   const parts = regexInput.split("/");
@@ -33,7 +34,8 @@ function processStringWithRegex(str: string, regexInput: string): string {
 }
 
 export function Replacer() {
-  const [onSaveSuccess, setOnSaveSuccess] = React.useState(false);
+  const { state: notificationsState, dispatch: notificationsDispatch } =
+    useContext(NotificationsContext);
   const [beforeTag, setBeforeTag] = React.useState("");
   const [afterTag, setAfterTag] = React.useState("");
   const [selectedPartialTag, setSelectedPartialTag] = React.useState("");
@@ -50,13 +52,10 @@ export function Replacer() {
     datasets.forEach((dataset) => {
       dispatch({ type: "SAVE_CAPTION", payload: dataset });
     });
-    setOnSaveSuccess(true);
-  };
-  const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOnSaveSuccess(false);
+    notificationsDispatch({
+      type: "NOTIFY",
+      payload: { open: true, msg: "Saved", severity: sv.SUCCESS },
+    });
   };
   const replaceATag = () => {
     console.debug("replaceATag", beforeTag, afterTag);
@@ -263,16 +262,6 @@ export function Replacer() {
         </Box>
       </Box>
       <span style={{ padding: "1em" }}></span>
-      <Snackbar
-        open={onSaveSuccess}
-        autoHideDuration={2000}
-        onClose={snackClose}
-      >
-        <Alert onClose={snackClose} severity="success" sx={{ width: "100%" }}>
-          {" "}
-          Save Success
-        </Alert>
-      </Snackbar>
     </Paper>
   );
 }

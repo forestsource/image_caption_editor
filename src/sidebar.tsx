@@ -9,7 +9,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import ListIcon from "@mui/icons-material/List";
 import Divider from "@mui/material/Divider";
@@ -18,9 +17,10 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BurstModeIcon from "@mui/icons-material/BurstMode";
 
-import { get as IDAget, set as IDAset } from "idb-keyval";
 import type { Image, Caption, Dataset } from "./types";
 import { DatasetsContext } from "./Contexts/DatasetsContext";
+import { NotificationsContext } from "./Contexts/NotificationsContext";
+import { Severity as sv } from "./types";
 
 const drawerWidth = 3 / 12;
 
@@ -37,16 +37,9 @@ let filenameWithoutExtention = (path: string) => {
 
 export function Sidebar() {
   const { state, dispatch } = useContext(DatasetsContext);
+  const { state: notificationsState, dispatch: notificationsDispatch } =
+    useContext(NotificationsContext);
   const datasets = state.datasets;
-  const [onPageInfo, setOnPageInfo] = React.useState(false);
-  const [pageInfoMsg, setPageInfoMsg] = React.useState("");
-
-  const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOnPageInfo(false);
-  };
 
   async function verifyPermission() {
     console.debug("verifyPermission");
@@ -55,14 +48,26 @@ export function Sidebar() {
       dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
     } catch (e) {
       console.info("Cancel directory pickup", e);
-      setPageInfoMsg("Directory not selected.");
-      setOnPageInfo(true);
+      notificationsDispatch({
+        type: "NOTIFY",
+        payload: {
+          open: true,
+          msg: "Directory not selected.",
+          severity: sv.WARNING,
+        },
+      });
       return;
     }
     if (dirHandle === undefined || dirHandle === null) {
       console.info("Cancel directory pickup");
-      setPageInfoMsg("Directory not selected.");
-      setOnPageInfo(true);
+      notificationsDispatch({
+        type: "NOTIFY",
+        payload: {
+          open: true,
+          msg: "Directory not selected.",
+          severity: sv.WARNING,
+        },
+      });
       return;
     }
     await createDataset(dirHandle);
@@ -218,12 +223,6 @@ export function Sidebar() {
           ))}
         </ImageList>
       </Drawer>
-      <Snackbar open={onPageInfo} autoHideDuration={3000} onClose={snackClose}>
-        <Alert onClose={snackClose} severity="info" sx={{ width: "100%" }}>
-          {" "}
-          {pageInfoMsg}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 }

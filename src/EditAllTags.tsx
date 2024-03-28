@@ -5,11 +5,12 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Fab from "@mui/material/Fab";
 import SaveIcon from "@mui/icons-material/Save";
-import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import { Avatar } from "@mui/material";
 
 import { DatasetsContext } from "./Contexts/DatasetsContext";
+import { NotificationsContext } from "./Contexts/NotificationsContext";
+import { Severity as sv } from "./types";
 
 interface TagChip {
   tagName: string;
@@ -27,6 +28,8 @@ const isValidRegex = (userInput: string): boolean => {
 
 export function EditAllTags() {
   const { state, dispatch } = useContext(DatasetsContext);
+  const { state: notificationsState, dispatch: notificationsDispatch } =
+    useContext(NotificationsContext);
   const datasets = state.datasets;
   const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
   const allTags = (): TagChip[] => {
@@ -46,8 +49,6 @@ export function EditAllTags() {
       .sort((a, b) => b.count - a.count);
   };
   const [filter, setFilter] = React.useState<string>("");
-  const [onSaveSuccess, setOnSaveSuccess] = React.useState(false);
-  const [onSaveFailure, setOnSaveFailure] = React.useState(false);
 
   const filterdTags = () => {
     if (filter === "" || filter === undefined) {
@@ -70,15 +71,14 @@ export function EditAllTags() {
     datasets.forEach((dataset) => {
       dispatch({ type: "SAVE_CAPTION", payload: dataset });
     });
-    setOnSaveSuccess(true);
-  };
-
-  const snackClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOnSaveSuccess(false);
-    setOnSaveFailure(false);
+    notificationsDispatch({
+      type: "NOTIFY",
+      payload: {
+        open: true,
+        msg: "Save All Tags",
+        severity: sv.SUCCESS,
+      },
+    });
   };
 
   return (
@@ -113,24 +113,12 @@ export function EditAllTags() {
             label={tagChip.tagName}
             color={"primary"}
             variant="outlined"
-            avatar={
-              <Avatar sx={{ backgroundColor: "#FFF" }}>{tagChip.count}</Avatar>
-            }
+            avatar={<Avatar>{tagChip.count}</Avatar>}
             sx={{ margin: "0.3em" }}
             onDelete={handleDelete(tagChip.tagName)}
           />
         ))}
       </Box>
-      <Snackbar
-        open={onSaveSuccess}
-        autoHideDuration={2000}
-        onClose={snackClose}
-      >
-        <Alert onClose={snackClose} severity="success" sx={{ width: "100%" }}>
-          {" "}
-          Save Success
-        </Alert>
-      </Snackbar>
     </Paper>
   );
 }
