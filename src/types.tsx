@@ -21,7 +21,12 @@ export interface suggestionTags {
   destabilizedTags: string[];
 }
 
+export enum PreferredLanguage {
+  JA = "ja",
+  EN = "en",
+}
+
 export interface Setting {
   darkMode: boolean;
-  preferredLanguage: string;
+  preferredLanguage: PreferredLanguage;
 }
