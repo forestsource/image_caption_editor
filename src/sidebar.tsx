@@ -1,5 +1,5 @@
 import { Drawer } from "@mui/material";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
@@ -9,7 +9,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import Alert from "@mui/material/Alert";
 import ListIcon from "@mui/icons-material/List";
 import Divider from "@mui/material/Divider";
 
@@ -89,7 +88,6 @@ export function Sidebar() {
       const name = (await fh).name;
       const file: File = await (await fh).getFile();
       const file_uri: string = window.URL.createObjectURL(file);
-      // file type が png/jpg/jiff/gif/webp なら画像として扱う
       if (
         file.type == "image/png" ||
         file.type == "image/jpeg" ||

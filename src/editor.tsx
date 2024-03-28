@@ -5,7 +5,6 @@ import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Chip from "@mui/material/Chip";
-import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -20,7 +19,6 @@ import Autocomplete, {
 import { useHotkeys } from "react-hotkeys-hook";
 import Papa from "papaparse";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
 
 import "./App.css";
 import type { Dataset, suggestionTags } from "./types";
