@@ -3,19 +3,22 @@ import Box from "@mui/material/Box";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
-import { ThemeContext } from "./Contexts/ThemeContext";
+import { SettingsContext } from "./Contexts/SettingsContext";
 
 export function Settings() {
-  const { darkMode, setDarkMode } = useContext(ThemeContext);
-
+  const { state, dispatch } = useContext(SettingsContext);
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDarkMode(event.target.checked);
+    let setting = { ...state.setting, darkMode: event.target.checked };
+    dispatch({
+      type: "SET_SETTING",
+      payload: setting,
+    });
   };
 
   return (
     <Box sx={{ margin: "1em" }}>
       <FormControlLabel
-        checked={darkMode}
+        checked={state.setting.darkMode}
         control={<Switch onChange={handleThemeChange} />}
         label="dark mode"
       />

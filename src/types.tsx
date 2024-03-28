@@ -20,3 +20,8 @@ export interface suggestionTags {
   normalizedTag: string;
   destabilizedTags: string[];
 }
+
+export interface Setting {
+  darkMode: boolean;
+  preferredLanguage: string;
+}

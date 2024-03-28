@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
-import { ThemeProvider } from "@mui/material/styles";
-import { createTheme } from "@mui/material/styles";
 import Grid from "@mui/material/Unstable_Grid2";
 
 import { ListDirectory } from "./list";
@@ -11,34 +9,15 @@ import { Editor } from "./editor";
 import { Sidebar } from "./sidebar";
 import { BatchEditor } from "./BatchEditor";
 import { Settings } from "./Settings";
-import { ThemeContext } from "./Contexts/ThemeContext";
+import { SettingsProvider } from "./Contexts/SettingsContext";
 import { DatasetsProvider } from "./Contexts/DatasetsContext";
 import { TagEditorProvider } from "./Contexts/TagEditorContext";
+import { ThemeProviderCustom } from "./ThemeProviderCustom";
 
 function App() {
-  const [darkMode, setDarkMode] = useState(false);
-  const checkUserTheme = () => {
-    const isDarkMode =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    if (isDarkMode) {
-      setDarkMode(true);
-    }
-  };
-
-  useEffect(() => {
-    checkUserTheme();
-  }, []);
-
-  const theme = createTheme({
-    palette: {
-      mode: darkMode ? "dark" : "light",
-    },
-  });
-
   return (
-    <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
-      <ThemeProvider theme={theme}>
+    <SettingsProvider>
+      <ThemeProviderCustom>
         <CssBaseline />
         <Container
           disableGutters
@@ -69,8 +48,8 @@ function App() {
             </DatasetsProvider>
           </BrowserRouter>
         </Container>
-      </ThemeProvider>
-    </ThemeContext.Provider>
+      </ThemeProviderCustom>
+    </SettingsProvider>
   );
 }
 
