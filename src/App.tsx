@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,6 +17,18 @@ import { TagEditorProvider } from "./Contexts/TagEditorContext";
 
 function App() {
   const [darkMode, setDarkMode] = useState(false);
+  const checkUserTheme = () => {
+    const isDarkMode =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    if (isDarkMode) {
+      setDarkMode(true);
+    }
+  };
+
+  useEffect(() => {
+    checkUserTheme();
+  }, []);
 
   const theme = createTheme({
     palette: {
