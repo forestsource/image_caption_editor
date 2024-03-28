@@ -16,6 +16,7 @@ import Autocomplete, {
   AutocompleteChangeReason,
   AutocompleteChangeDetails,
 } from "@mui/material/Autocomplete";
+
 import { useHotkeys } from "react-hotkeys-hook";
 import Papa from "papaparse";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
@@ -141,7 +142,8 @@ export function Editor() {
             transition: "transform 0.3s",
             "&:hover": {
               cursor: "pointer",
-              opacity: [0.1, 0.1, 0.1],
+              opacity: [0.1, 0.1, 0.9],
+              color: "#e91e63",
             },
           }}
         ></Chip>
