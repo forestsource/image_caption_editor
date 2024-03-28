@@ -50,41 +50,22 @@ export function Sidebar() {
 
   async function verifyPermission() {
     console.debug("verifyPermission");
-    let dirHandle = await IDAget("dir");
-    if (dirHandle !== undefined) {
-      let permission = await dirHandle.queryPermission({ mode: "readwrite" });
-      if (permission !== "granted") {
-        try {
-          permission = await dirHandle.requestPermission({ mode: "readwrite" });
-        } catch (e) {
-          console.warn("Cannot get access permission", e);
-          setPageInfoMsg("You need to allow access to the directory.");
-          setOnPageInfo(true);
-          return;
-        }
-        if (permission !== "granted") {
-          try {
-            dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
-          } catch (e) {
-            console.info("Cancel directory pickup", e);
-            setPageInfoMsg("Directory not selected.");
-            setOnPageInfo(true);
-            return;
-          }
-        }
-      }
-    } else {
-      try {
-        dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
-      } catch (e) {
-        console.info("Cancel directory pickup", e);
-        setPageInfoMsg("Directory not selected.");
-        setOnPageInfo(true);
-        return;
-      }
+    let dirHandle = null;
+    try {
+      dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+    } catch (e) {
+      console.info("Cancel directory pickup", e);
+      setPageInfoMsg("Directory not selected.");
+      setOnPageInfo(true);
+      return;
+    }
+    if (dirHandle === undefined || dirHandle === null) {
+      console.info("Cancel directory pickup");
+      setPageInfoMsg("Directory not selected.");
+      setOnPageInfo(true);
+      return;
     }
     await createDataset(dirHandle);
-    // await IDAset("dir", dirHandle);
   }
   const tagSplitter = (tags: string): string[] => {
     if (tags === "") {
@@ -114,7 +95,6 @@ export function Sidebar() {
         const image: Image = { name: value.name, uri: file_uri };
         images.push(image);
       } else if (file.type == "text/plain") {
-        console.debug("text file: ", value.name, file_uri, file.type);
         const caption: Caption = {
           name: value.name,
           uri: file_uri,
