@@ -21,7 +21,7 @@ import Papa from "papaparse";
 import { useNavigate, Link as RouterLink } from "react-router-dom";
 
 import "./App.css";
-import type { Dataset, suggestionTags } from "./types";
+import type { Dataset, Image, Caption, suggestionTags } from "./types";
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 import { TagEditorContext } from "./Contexts/TagEditorContext";
 import { NotificationsContext } from "./Contexts/NotificationsContext";
@@ -63,7 +63,19 @@ export function Editor() {
   let tags = tagEditorState.currentTags;
   let { pageId } = useParams();
   let pageIndex: number = parseInt(pageId!);
-  let dataset: Dataset = datasets[pageIndex];
+  let dataset = () => {
+    let dataset: Dataset;
+    if (datasets.length === 0) {
+      dataset = {
+        name: "No dataset",
+        image: { uri: "" } as Image,
+        caption: { name: "", uri: "", content: [] } as Caption,
+      } as Dataset;
+    } else {
+      dataset = datasets[pageIndex];
+    }
+    return dataset;
+  };
   const [suggestionTags, setSuggestionTags] = React.useState<suggestionTags[]>(
     []
   );
@@ -73,7 +85,7 @@ export function Editor() {
   useEffect(() => {
     tagEditorDispatch({
       type: "SET_TAGS",
-      payload: datasets[pageIndex].caption.content,
+      payload: dataset().caption.content,
     });
   }, [pageIndex]);
 
@@ -168,7 +180,7 @@ export function Editor() {
     details?: AutocompleteChangeDetails<string> | undefined
   ) => {
     console.log("onChangeTags: ", value);
-    datasets[pageIndex].caption.content = value;
+    dataset().caption.content = value;
     datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
     tagEditorDispatch({ type: "SET_TAGS", payload: value });
   };
@@ -177,7 +189,7 @@ export function Editor() {
     const tag = target.parentElement?.textContent;
     console.debug("onDeleteTag: ", tag);
     const newTags = tags.filter((item) => item !== tag);
-    datasets[pageIndex].caption.content = newTags;
+    dataset().caption.content = newTags;
     datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
     tagEditorDispatch({ type: "SET_TAGS", payload: newTags });
   };
@@ -205,12 +217,12 @@ export function Editor() {
   useHotkeys("ctrl+ArrowRight", () => nextDataset());
   useHotkeys("ctrl+ArrowLeft", () => prevDataset());
   async function onSaveCaption() {
-    datasetsDispatch({ type: "SAVE_CAPTION", payload: dataset });
+    datasetsDispatch({ type: "SAVE_CAPTION", payload: dataset() });
     notificationsDispatch({
       type: "NOTIFY",
       payload: { open: true, msg: "Caption saved", severity: sv.SUCCESS },
     });
-    console.info(`onSave: ${dataset.caption.name}`);
+    console.info(`onSave: ${dataset().caption.name}`);
   }
 
   /* page control */
@@ -251,12 +263,12 @@ export function Editor() {
     <Box>
       <Box sx={{ margin: "1rem" }}>
         <Breadcrumbs aria-label="breadcrumb" sx={{ marginBottom: "1em" }}>
-          <Typography>{datasets[pageIndex].image.name}</Typography>
+          <Typography>{dataset().name}</Typography>
         </Breadcrumbs>
         <Card>
           <CardMedia
             component="img"
-            image={dataset.image.uri}
+            image={dataset().image.uri}
             sx={{
               minHeight: "40vh",
               maxHeight: "40vh",
