@@ -10,10 +10,14 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 
 import { SettingsContext } from "./Contexts/SettingsContext";
-import { PreferredLanguage as pl } from "./types";
+import { NotificationsContext } from "./Contexts/NotificationsContext";
+import { PreferredLanguage as pl, Severity as sv } from "./types";
 
 export function Settings() {
   const { state, dispatch } = useContext(SettingsContext);
+  const { state: notificationsState, dispatch: notificationsDispatch } =
+    useContext(NotificationsContext);
+
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     let setting = { ...state.setting, darkMode: event.target.checked };
     dispatch({
@@ -34,6 +38,14 @@ export function Settings() {
     dispatch({
       type: "SAVE_SETTING",
       payload: state.setting,
+    });
+    notificationsDispatch({
+      type: "NOTIFY",
+      payload: {
+        open: true,
+        msg: "Setting saved",
+        severity: sv.SUCCESS,
+      },
     });
   };
 

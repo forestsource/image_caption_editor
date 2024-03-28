@@ -12,42 +12,45 @@ import { Settings } from "./Settings";
 import { SettingsProvider } from "./Contexts/SettingsContext";
 import { DatasetsProvider } from "./Contexts/DatasetsContext";
 import { TagEditorProvider } from "./Contexts/TagEditorContext";
+import { NotificationsProvider } from "./Contexts/NotificationsContext";
 import { ThemeProviderCustom } from "./ThemeProviderCustom";
 
 function App() {
   return (
     <SettingsProvider>
       <ThemeProviderCustom>
-        <CssBaseline />
-        <Container
-          disableGutters
-          maxWidth={false}
-          sx={{
-            backgroundColor: "background.default",
-            paddingTop: "1em",
-            height: "100vh",
-          }}
-        >
-          <BrowserRouter>
-            <DatasetsProvider>
-              <TagEditorProvider>
-                <Grid container>
-                  <Grid xs={3} id="sidebar-before-grid">
-                    <Sidebar />
+        <NotificationsProvider>
+          <CssBaseline />
+          <Container
+            disableGutters
+            maxWidth={false}
+            sx={{
+              backgroundColor: "background.default",
+              paddingTop: "1em",
+              height: "100vh",
+            }}
+          >
+            <BrowserRouter>
+              <DatasetsProvider>
+                <TagEditorProvider>
+                  <Grid container>
+                    <Grid xs={3} id="sidebar-before-grid">
+                      <Sidebar />
+                    </Grid>
+                    <Grid xs={9}>
+                      <Routes>
+                        <Route path="/" element={<ListDirectory />} />
+                        <Route path="/edit/:pageId" element={<Editor />} />
+                        <Route path="/batchEdit" element={<BatchEditor />} />
+                        <Route path="/settings" element={<Settings />} />
+                      </Routes>
+                    </Grid>
                   </Grid>
-                  <Grid xs={9}>
-                    <Routes>
-                      <Route path="/" element={<ListDirectory />} />
-                      <Route path="/edit/:pageId" element={<Editor />} />
-                      <Route path="/batchEdit" element={<BatchEditor />} />
-                      <Route path="/settings" element={<Settings />} />
-                    </Routes>
-                  </Grid>
-                </Grid>
-              </TagEditorProvider>
-            </DatasetsProvider>
-          </BrowserRouter>
-        </Container>
+                </TagEditorProvider>
+              </DatasetsProvider>
+            </BrowserRouter>
+          </Container>
+        </NotificationsProvider>
       </ThemeProviderCustom>
     </SettingsProvider>
   );

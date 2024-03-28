@@ -30,3 +30,16 @@ export interface Setting {
   darkMode: boolean;
   preferredLanguage: PreferredLanguage;
 }
+
+export enum Severity {
+  INFO = "info",
+  SUCCESS = "success",
+  WARNING = "warning",
+  ERROR = "error",
+}
+
+export interface Notification {
+  open: boolean;
+  msg: string;
+  severity: Severity;
+}
