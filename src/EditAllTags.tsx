@@ -86,19 +86,18 @@ export function EditAllTags() {
       <Box
         sx={{
           margin: "1em",
-          display: "flex",
-          justifyContent: "space-between",
         }}
       >
-        <Fab
-          aria-label="save"
-          color="primary"
-          variant="extended"
-          onClick={onSaveCaption}
-          sx={{ margin: 1 }}
-        >
-          <SaveIcon sx={{ mr: 1 }} /> Save All
-        </Fab>
+        <Box sx={{ paddingTop: "1em" }}>
+          <Fab
+            aria-label="save"
+            color="primary"
+            variant="extended"
+            onClick={onSaveCaption}
+          >
+            <SaveIcon sx={{ mr: 1 }} /> Save All
+          </Fab>
+        </Box>
         <TextField
           id="tag-filter"
           label="search"

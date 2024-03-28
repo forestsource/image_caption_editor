@@ -6,6 +6,7 @@ import Tab from "@mui/material/Tab";
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 import { TopNTags } from "./TopNTags";
 import { EditAllTags } from "./EditAllTags";
+import { Replacer } from "./Replacer";
 
 export function BatchEditor() {
   const { state, dispatch } = useContext(DatasetsContext);
@@ -23,10 +24,12 @@ export function BatchEditor() {
     <Box>
       <Tabs value={tabValue} onChange={handleTabChange}>
         <Tab label="Edit All Tags" />
+        <Tab label="Replacer" />
         <Tab label="Top N Tags" />
       </Tabs>
       {tabValue === 0 && <EditAllTags />}
-      {tabValue === 1 && <TopNTags />}
+      {tabValue === 1 && <Replacer />}
+      {tabValue === 2 && <TopNTags />}
     </Box>
   );
 }
