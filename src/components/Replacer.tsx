@@ -11,7 +11,6 @@ import Fab from "@mui/material/Fab";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
-
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AbcIcon from "@mui/icons-material/Abc";
@@ -20,18 +19,7 @@ import SellIcon from "@mui/icons-material/Sell";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
-
-function processStringWithRegex(str: string, regexInput: string): string {
-  const parts = regexInput.split("/");
-  if (parts.length < 3) {
-    console.debug(parts);
-    throw new Error("Invalid regex format");
-  }
-  const pattern = parts[1];
-  const flags = parts[3];
-  const regex = new RegExp(pattern, flags);
-  return str.replace(regex, parts[2]);
-}
+import { processStringWithRegexp } from "../RegexpUtil";
 
 export function Replacer() {
   const { t } = useTranslation();
@@ -87,7 +75,7 @@ export function Replacer() {
       const newCaptionContent = dataset.caption.content.map((tag) => {
         let result = "";
         try {
-          result = processStringWithRegex(tag, regexpString);
+          result = processStringWithRegexp(tag, regexpString);
         } catch {
           console.info("regexp is invalid: ", regexpString);
           // TODO: format error を表示する

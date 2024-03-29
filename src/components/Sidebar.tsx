@@ -11,29 +11,17 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ListIcon from "@mui/icons-material/List";
 import Divider from "@mui/material/Divider";
-import { useTranslation } from "react-i18next";
-
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BurstModeIcon from "@mui/icons-material/BurstMode";
+import { useTranslation } from "react-i18next";
 
-import type { Image, Caption, Dataset } from "../types";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
+import { createDataset } from "../DatasetUtil";
 
-const drawerWidth = 3 / 12;
-
-const filenameWithoutExtention = (path: string) => {
-  if (path === "" || path === undefined) {
-    return "";
-  }
-  const basename = path.split("/").pop();
-  if (basename === undefined) {
-    return "";
-  }
-  return basename.split(".")[0];
-};
+const DRAWER_WIDTH = 3 / 12;
 
 export function Sidebar() {
   const { t } = useTranslation();
@@ -48,15 +36,6 @@ export function Sidebar() {
       dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
     } catch (e) {
       console.info("Cancel directory pickup", e);
-      notificationsDispatch({
-        type: "NOTIFY",
-        payload: {
-          open: true,
-          msg: "Directory not selected.",
-          severity: sv.WARNING,
-        },
-      });
-      return;
     }
     if (dirHandle === undefined || dirHandle === null) {
       console.info("Cancel directory pickup");
@@ -64,62 +43,13 @@ export function Sidebar() {
         type: "NOTIFY",
         payload: {
           open: true,
-          msg: "Directory not selected.",
+          msg: t("sidebar.no_picked"),
           severity: sv.WARNING,
         },
       });
       return;
     }
-    await createDataset(dirHandle);
-  }
-  const tagSplitter = (tags: string): string[] => {
-    if (tags === "") {
-      return [];
-    }
-    return tags.split(",").map((tag) => tag.trim());
-  };
-
-  async function createDataset(dirHandle: FileSystemDirectoryHandle) {
-    console.debug("createDataset");
-    const datasets: Dataset[] = [];
-    const images: Image[] = [];
-    const captions: Caption[] = [];
-    for await (const [, value] of dirHandle.entries()) {
-      const fh = dirHandle.getFileHandle(value.name);
-      const file: File = await (await fh).getFile();
-      const file_uri: string = window.URL.createObjectURL(file);
-      if (
-        file.type == "image/png" ||
-        file.type == "image/jpeg" ||
-        file.type == "image/jiff" ||
-        file.type == "image/gif" ||
-        file.type == "image/webp"
-      ) {
-        const image: Image = { name: value.name, uri: file_uri };
-        images.push(image);
-      } else if (file.type == "text/plain") {
-        const caption: Caption = {
-          name: value.name,
-          uri: file_uri,
-          content: tagSplitter(await file.text()),
-        };
-        captions.push(caption);
-      }
-    }
-    for await (const image of images) {
-      const caption = captions.find(
-        (caption) =>
-          filenameWithoutExtention(caption.name) ===
-          filenameWithoutExtention(image.name)
-      );
-      if (caption) {
-        datasets.push({ name: image.name, image, caption, dirHandle });
-      } else {
-        console.info("caption not found for image", image);
-        const caption: Caption = { name: image.name, uri: "", content: [] };
-        datasets.push({ name: image.name, image, caption, dirHandle });
-      }
-    }
+    const datasets = await createDataset(dirHandle);
     dispatch({ type: "SET_DATASETS", payload: datasets });
   }
 
@@ -135,63 +65,60 @@ export function Sidebar() {
         id="sidebar-drawer"
         variant="permanent"
         sx={{
-          width: drawerWidth,
+          width: DRAWER_WIDTH,
           [`& .MuiDrawer-paper`]: {
-            width: drawerWidth,
+            width: DRAWER_WIDTH,
             minWidth: "50px",
             boxSizing: "border-box",
           },
         }}
       >
         <List id="sidebar-list">
-          <ListItem disablePadding>
+          <ListItem disablePadding onClick={verifyPermission}>
             <ListItemButton>
               <ListItemIcon>
                 <FileUploadIcon />
               </ListItemIcon>
-              <ListItemText
-                primary={t("sidebar.load_dataset")}
-                onClick={verifyPermission}
-              />
+              <ListItemText primary={t("sidebar.load_dataset")} />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
+          <ListItem
+            disablePadding
+            onClick={() => {
+              navigate("/");
+            }}
+          >
             <ListItemButton>
               <ListItemIcon>
                 <ListIcon />
               </ListItemIcon>
-              <ListItemText
-                primary={t("sidebar.list")}
-                onClick={() => {
-                  navigate("/");
-                }}
-              />
+              <ListItemText primary={t("sidebar.list")} />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
+          <ListItem
+            disablePadding
+            onClick={() => {
+              navigate("/batchEdit");
+            }}
+          >
             <ListItemButton>
               <ListItemIcon>
                 <BurstModeIcon />
               </ListItemIcon>
-              <ListItemText
-                primary={t("sidebar.batch_edit")}
-                onClick={() => {
-                  navigate("/batchEdit");
-                }}
-              />
+              <ListItemText primary={t("sidebar.batch_edit")} />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
+          <ListItem
+            disablePadding
+            onClick={() => {
+              navigate("/settings");
+            }}
+          >
             <ListItemButton>
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
-              <ListItemText
-                primary={t("sidebar.settings")}
-                onClick={() => {
-                  navigate("/settings");
-                }}
-              />
+              <ListItemText primary={t("sidebar.settings")} />
             </ListItemButton>
           </ListItem>
         </List>

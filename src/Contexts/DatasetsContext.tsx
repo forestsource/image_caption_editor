@@ -6,6 +6,7 @@ type DatasetsState = {
 };
 
 type DatasetsAction =
+  | { type: "CREATE_DATASETS"; payload: FileSystemDirectoryHandle }
   | { type: "SET_DATASETS"; payload: Dataset[] }
   | { type: "ADD_DATASET"; payload: Dataset }
   | { type: "REMOVE_DATASET"; payload: string }

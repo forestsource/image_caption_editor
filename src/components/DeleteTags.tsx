@@ -11,56 +11,29 @@ import { useTranslation } from "react-i18next";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
+import { tagCount, filterdTags } from "../TagUtils";
 
 interface TagChip {
   tagName: string;
   count: number;
 }
 
-const isValidRegex = (userInput: string): boolean => {
-  try {
-    new RegExp(userInput);
-  } catch (e) {
-    return false;
-  }
-  return true;
-};
-
 export function DeleteTags() {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(DatasetsContext);
   const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
+  const [filter, setFilter] = React.useState<string>("");
   const datasets = state.datasets;
   const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
-  const allTags = (): TagChip[] => {
-    const tags = flatTags.reduce((acc, tag) => {
-      if (acc[tag] === undefined) {
-        acc[tag] = 1;
-      } else {
-        acc[tag] += 1;
-      }
-      return acc;
-    }, {} as { [key: string]: number });
+
+  const allTagChips = (): TagChip[] => {
+    const tags = tagCount(filterdTags(filter, flatTags));
     return Object.entries(tags)
       .map(([tagName, count]) => ({
         tagName,
         count,
       }))
       .sort((a, b) => b.count - a.count);
-  };
-  const [filter, setFilter] = React.useState<string>("");
-
-  const filterdTags = () => {
-    if (filter === "" || filter === undefined) {
-      return allTags();
-    }
-    if (!isValidRegex(filter)) {
-      return [];
-    }
-    const regex = new RegExp(filter, "i");
-    return allTags().filter((tag) => {
-      return tag.tagName.match(regex);
-    });
   };
 
   const handleDelete = (tag: string) => () => {
@@ -107,7 +80,7 @@ export function DeleteTags() {
         />
       </Box>
       <Box sx={{ margin: "1em", paddingBottom: "1em" }} id="allTagsBox">
-        {filterdTags().map((tagChip, index) => (
+        {allTagChips().map((tagChip, index) => (
           <Chip
             key={index}
             label={tagChip.tagName}

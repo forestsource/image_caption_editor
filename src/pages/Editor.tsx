@@ -17,9 +17,7 @@ import Autocomplete, {
   AutocompleteChangeDetails,
 } from "@mui/material/Autocomplete";
 import { useTranslation } from "react-i18next";
-
 import { useHotkeys } from "react-hotkeys-hook";
-import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 
 import type { Dataset, Image, Caption, suggestionTags } from "../types";
@@ -27,6 +25,7 @@ import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { TagEditorContext } from "../Contexts/TagEditorContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
+import { loadSuggestionTags, searchIncludeComplement } from "../TagUtils";
 
 // DnD
 import {
@@ -37,7 +36,6 @@ import {
   DragEndEvent,
   closestCenter,
 } from "@dnd-kit/core";
-
 import {
   SortableContext,
   rectSortingStrategy,
@@ -80,7 +78,10 @@ export function Editor() {
   const [suggestionTags, setSuggestionTags] = React.useState<suggestionTags[]>(
     []
   );
-  loadSuggestionTags();
+
+  useEffect(() => {
+    fetchSuggestionTags();
+  }, []);
 
   // Change tags when page changes
   useEffect(() => {
@@ -90,25 +91,8 @@ export function Editor() {
     });
   }, [pageIndex]);
 
-  async function loadSuggestionTags() {
-    const response = await fetch(process.env.PUBLIC_URL + "/danbooru.csv");
-    const csvData = await response.text();
-    const parsedCsvData = Papa.parse(csvData, {
-      header: false,
-      dynamicTyping: false,
-    });
-    const results: string[][] = parsedCsvData.data as string[][];
-    const suggestionTags: suggestionTags[] = [];
-    results.forEach((result) => {
-      let destabilizedTag: string[] = [];
-      if (result[3] !== undefined) {
-        destabilizedTag = result[3].split(",");
-      }
-      suggestionTags.push({
-        normalizedTag: result[0],
-        destabilizedTags: destabilizedTag,
-      });
-    });
+  async function fetchSuggestionTags() {
+    const suggestionTags = await loadSuggestionTags();
     setSuggestionTags(suggestionTags);
   }
 
@@ -175,6 +159,7 @@ export function Editor() {
     [tags]
   );
 
+  /* handlers */
   const onChangeTags = (
     _event: React.SyntheticEvent,
     value: string[],
@@ -195,29 +180,6 @@ export function Editor() {
     datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
     tagEditorDispatch({ type: "SET_TAGS", payload: newTags });
   };
-
-  /* Autocomplete filter */
-  const optionFilter = (
-    options: string[],
-    state: FilterOptionsState<string>
-  ): string[] => {
-    if (state.inputValue.length <= INPUT_LENGTH_ENABLE_AUTOCOMPLETE) {
-      return [];
-    }
-    const fuzzySearch = suggestionTags.filter((suggestionTag) => {
-      return suggestionTag.destabilizedTags.includes(state.inputValue);
-    });
-    const partialMatch = suggestionTags.filter((suggestionTag) => {
-      return suggestionTag.normalizedTag.includes(state.inputValue);
-    });
-    const result = fuzzySearch.concat(partialMatch);
-    return result.map((suggestionTag) => suggestionTag.normalizedTag);
-  };
-
-  /* shortcut keys */
-  useHotkeys("ctrl+Enter", () => onSaveCaption());
-  useHotkeys("ctrl+ArrowRight", () => nextDataset());
-  useHotkeys("ctrl+ArrowLeft", () => prevDataset());
   async function onSaveCaption() {
     datasetsDispatch({ type: "SAVE_CAPTION", payload: dataset() });
     notificationsDispatch({
@@ -226,6 +188,24 @@ export function Editor() {
     });
     console.info(`onSave: ${dataset().caption.name}`);
   }
+  const optionFilter = (
+    _options: string[],
+    state: FilterOptionsState<string>
+  ): string[] => {
+    if (state.inputValue.length <= INPUT_LENGTH_ENABLE_AUTOCOMPLETE) {
+      return [];
+    }
+    return searchIncludeComplement(suggestionTags, state.inputValue);
+  };
+  const pageChenger = (event: React.ChangeEvent<unknown>, value: number) => {
+    const index = value - 1;
+    pageChange(index);
+  };
+
+  /* shortcut keys */
+  useHotkeys("ctrl+Enter", () => onSaveCaption());
+  useHotkeys("ctrl+ArrowRight", () => nextDataset());
+  useHotkeys("ctrl+ArrowLeft", () => prevDataset());
 
   /* page control */
   const navigate = useNavigate();
@@ -263,10 +243,6 @@ export function Editor() {
         },
       });
     }
-  };
-  const pageChenger = (event: React.ChangeEvent<unknown>, value: number) => {
-    const index = value - 1;
-    pageChange(index);
   };
 
   return (

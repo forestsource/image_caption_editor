@@ -13,7 +13,8 @@
     "load_dataset": "Load Dataset",
     "list": "List",
     "batch_edit": "Batch Processing",
-    "settings": "Settings"
+    "settings": "Settings",
+    "no_picked": "Cancel directory pickup"
   },
   "editor": {
     "no_dataset": "No dataset loaded",

@@ -15,11 +15,10 @@ import MenuItem from "@mui/material/MenuItem";
 import SaveIcon from "@mui/icons-material/Save";
 import { useTranslation } from "react-i18next";
 
-import Papa from "papaparse";
-
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv, suggestionTags } from "../types";
+import { loadSuggestionTags, searchIncludeComplement } from "../TagUtils";
 
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
@@ -36,28 +35,11 @@ export function AddTags() {
   const [insertTo, setInsertTo] = React.useState<string>("prefix");
 
   useEffect(() => {
-    loadSuggestionTags();
+    fetchSuggestionTags();
   }, []);
 
-  async function loadSuggestionTags() {
-    const response = await fetch(process.env.PUBLIC_URL + "/danbooru.csv");
-    const csvData = await response.text();
-    const parsedCsvData = Papa.parse(csvData, {
-      header: false,
-      dynamicTyping: false,
-    });
-    const results: string[][] = parsedCsvData.data as string[][];
-    const suggestionTags: suggestionTags[] = [];
-    results.forEach((result) => {
-      let destabilizedTag: string[] = [];
-      if (result[3] !== undefined) {
-        destabilizedTag = result[3].split(",");
-      }
-      suggestionTags.push({
-        normalizedTag: result[0],
-        destabilizedTags: destabilizedTag,
-      });
-    });
+  async function fetchSuggestionTags() {
+    const suggestionTags = await loadSuggestionTags();
     setSuggestionTags(suggestionTags);
   }
 
@@ -69,14 +51,7 @@ export function AddTags() {
     if (state.inputValue.length <= INPUT_LENGTH_ENABLE_AUTOCOMPLETE) {
       return [];
     }
-    const fuzzySearch = suggestionTags.filter((suggestionTag) => {
-      return suggestionTag.destabilizedTags.includes(state.inputValue);
-    });
-    const partialMatch = suggestionTags.filter((suggestionTag) => {
-      return suggestionTag.normalizedTag.includes(state.inputValue);
-    });
-    const result = fuzzySearch.concat(partialMatch);
-    return result.map((suggestionTag) => suggestionTag.normalizedTag);
+    return searchIncludeComplement(suggestionTags, state.inputValue);
   };
 
   const onSaveCaption = () => {

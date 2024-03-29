@@ -2,6 +2,7 @@ import { useContext } from "react";
 import Box from "@mui/material/Box";
 
 import { DatasetsContext } from "../Contexts/DatasetsContext";
+import { tagCount } from "../TagUtils";
 
 import {
   BarChart,
@@ -24,14 +25,7 @@ export function Statistics() {
   const datasets = state.datasets;
   const allTags = datasets.flatMap((dataset) => dataset.caption.content);
   const statics = (): statics[] => {
-    const tags = allTags.reduce((acc, tag) => {
-      if (acc[tag] === undefined) {
-        acc[tag] = 1;
-      } else {
-        acc[tag] += 1;
-      }
-      return acc;
-    }, {} as { [key: string]: number });
+    const tags = tagCount(allTags);
     return Object.entries(tags).map(([tagName, count]) => ({
       tagName,
       usageRatio: (count / datasets.length) * 100,
