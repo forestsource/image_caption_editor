@@ -39,6 +39,14 @@ const settingsReducer = (
         },
       };
     case "USE_USER_DEFAULT":
+      const savedSetting = localStorage.getItem("setting");
+      if (savedSetting) {
+        const settings = JSON.parse(savedSetting);
+        i18n.changeLanguage(settings.preferredLanguage);
+        return { ...state, setting: settings };
+      }
+
+      // read user system setting
       const isDarkMode =
         window.matchMedia &&
         window.matchMedia("(prefers-color-scheme: dark)").matches;
