@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import Box from "@mui/material/Box";
 
-import { DatasetsContext } from "./Contexts/DatasetsContext";
+import { DatasetsContext } from "../Contexts/DatasetsContext";
 
 import {
   BarChart,
@@ -19,7 +19,7 @@ interface statics {
 
 const TOP_N_TAGS = 25;
 
-export function TopNTags() {
+export function Statistics() {
   const { state } = useContext(DatasetsContext);
   const datasets = state.datasets;
   const allTags = datasets.flatMap((dataset) => dataset.caption.content);

@@ -22,12 +22,11 @@ import { useHotkeys } from "react-hotkeys-hook";
 import Papa from "papaparse";
 import { useNavigate } from "react-router-dom";
 
-import "./App.css";
-import type { Dataset, Image, Caption, suggestionTags } from "./types";
-import { DatasetsContext } from "./Contexts/DatasetsContext";
-import { TagEditorContext } from "./Contexts/TagEditorContext";
-import { NotificationsContext } from "./Contexts/NotificationsContext";
-import { Severity as sv } from "./types";
+import type { Dataset, Image, Caption, suggestionTags } from "../types";
+import { DatasetsContext } from "../Contexts/DatasetsContext";
+import { TagEditorContext } from "../Contexts/TagEditorContext";
+import { NotificationsContext } from "../Contexts/NotificationsContext";
+import { Severity as sv } from "../types";
 
 // DnD
 import {

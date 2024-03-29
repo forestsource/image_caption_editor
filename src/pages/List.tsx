@@ -7,8 +7,8 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-import type { Dataset } from "./types";
-import { DatasetsContext } from "./Contexts/DatasetsContext";
+import type { Dataset } from "../types";
+import { DatasetsContext } from "../Contexts/DatasetsContext";
 
 export function ListDirectory() {
   const { state } = useContext(DatasetsContext);

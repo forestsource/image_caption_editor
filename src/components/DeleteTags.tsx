@@ -8,9 +8,9 @@ import SaveIcon from "@mui/icons-material/Save";
 import Avatar from "@mui/material/Avatar";
 import { useTranslation } from "react-i18next";
 
-import { DatasetsContext } from "./Contexts/DatasetsContext";
-import { NotificationsContext } from "./Contexts/NotificationsContext";
-import { Severity as sv } from "./types";
+import { DatasetsContext } from "../Contexts/DatasetsContext";
+import { NotificationsContext } from "../Contexts/NotificationsContext";
+import { Severity as sv } from "../types";
 
 interface TagChip {
   tagName: string;

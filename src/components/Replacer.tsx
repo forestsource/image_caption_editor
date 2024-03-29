@@ -17,9 +17,9 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AbcIcon from "@mui/icons-material/Abc";
 import SellIcon from "@mui/icons-material/Sell";
 
-import { DatasetsContext } from "./Contexts/DatasetsContext";
-import { NotificationsContext } from "./Contexts/NotificationsContext";
-import { Severity as sv } from "./types";
+import { DatasetsContext } from "../Contexts/DatasetsContext";
+import { NotificationsContext } from "../Contexts/NotificationsContext";
+import { Severity as sv } from "../types";
 
 function processStringWithRegex(str: string, regexInput: string): string {
   const parts = regexInput.split("/");

@@ -10,9 +10,9 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import { useTranslation } from "react-i18next";
 
-import { SettingsContext } from "./Contexts/SettingsContext";
-import { NotificationsContext } from "./Contexts/NotificationsContext";
-import { PreferredLanguage as pl, Severity as sv } from "./types";
+import { SettingsContext } from "../Contexts/SettingsContext";
+import { NotificationsContext } from "../Contexts/NotificationsContext";
+import { PreferredLanguage as pl, Severity as sv } from "../types";
 import Typography from "@mui/material/Typography";
 
 export function Settings() {

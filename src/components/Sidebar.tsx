@@ -17,10 +17,10 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BurstModeIcon from "@mui/icons-material/BurstMode";
 
-import type { Image, Caption, Dataset } from "./types";
-import { DatasetsContext } from "./Contexts/DatasetsContext";
-import { NotificationsContext } from "./Contexts/NotificationsContext";
-import { Severity as sv } from "./types";
+import type { Image, Caption, Dataset } from "../types";
+import { DatasetsContext } from "../Contexts/DatasetsContext";
+import { NotificationsContext } from "../Contexts/NotificationsContext";
+import { Severity as sv } from "../types";
 
 const drawerWidth = 3 / 12;
 

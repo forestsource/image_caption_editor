@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
-import { SettingsContext } from "./Contexts/SettingsContext";
+import { SettingsContext } from "../Contexts/SettingsContext";
 
 export const ThemeProviderCustom: React.FC<{ children: React.ReactNode }> = ({
   // eslint-disable-next-line react/prop-types

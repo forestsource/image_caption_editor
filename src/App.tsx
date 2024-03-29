@@ -3,16 +3,16 @@ import Container from "@mui/material/Container";
 import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Unstable_Grid2";
 
-import { ListDirectory } from "./list";
-import { Editor } from "./editor";
-import { Sidebar } from "./sidebar";
-import { BatchEditor } from "./BatchEditor";
-import { Settings } from "./Settings";
+import { ListDirectory } from "./pages/List";
+import { Editor } from "./pages/Editor";
+import { Sidebar } from "./components/Sidebar";
+import { BatchEditor } from "./pages/BatchEditor";
+import { Settings } from "./pages/Settings";
 import { SettingsProvider } from "./Contexts/SettingsContext";
 import { DatasetsProvider } from "./Contexts/DatasetsContext";
 import { TagEditorProvider } from "./Contexts/TagEditorContext";
 import { NotificationsProvider } from "./Contexts/NotificationsContext";
-import { ThemeProviderCustom } from "./ThemeProviderCustom";
+import { ThemeProviderCustom } from "./components/ThemeProviderCustom";
 
 function App() {
   return (
