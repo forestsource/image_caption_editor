@@ -19,7 +19,8 @@ import { useTranslation } from "react-i18next";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
-import { createDataset } from "../DatasetUtil";
+import { loadDatasetFolder } from "../utils/DatasetUtil";
+import { DirectoryLoadError, InvalidFileTypeError } from "../Errors";
 
 const DRAWER_WIDTH = 3 / 12;
 
@@ -29,27 +30,76 @@ export function Sidebar() {
   const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
   const datasets = state.datasets;
 
-  async function verifyPermission() {
-    console.debug("verifyPermission");
-    let dirHandle = null;
+  async function loadDataset() {
+    let datasets = [];
     try {
-      dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+      datasets = await loadDatasetFolder();
     } catch (e) {
-      console.info("Cancel directory pickup", e);
+      if (e instanceof DirectoryLoadError) {
+        notificationsDispatch({
+          type: "NOTIFY",
+          payload: {
+            open: true,
+            msg: t("dataset.no_picked"),
+            severity: sv.WARNING,
+          },
+        });
+        return;
+      } else if (e instanceof InvalidFileTypeError) {
+        notificationsDispatch({
+          type: "NOTIFY",
+          payload: {
+            open: true,
+            msg: t("dataset.wrong_type"),
+            severity: sv.ERROR,
+          },
+        });
+        return;
+      } else {
+        let errMsg = String(e);
+        // This is a workaround for the error message not being caught by the above conditions
+        if (
+          errMsg.includes(
+            "The path supplied exists, but was not an entry of requested type."
+          )
+        ) {
+          console.info(e);
+          notificationsDispatch({
+            type: "NOTIFY",
+            payload: {
+              open: true,
+              msg: t("dataset.wrong_type"),
+              severity: sv.ERROR,
+            },
+          });
+          return;
+        }
+        if (e instanceof Error) {
+          console.error(e);
+          console.error(e.name);
+          console.error(`${typeof e} ${Object.prototype.toString.call(e)}`);
+        }
+        return notificationsDispatch({
+          type: "NOTIFY",
+          payload: {
+            open: true,
+            msg: t("dataset.unknown_error"),
+            severity: sv.ERROR,
+          },
+        });
+      }
     }
-    if (dirHandle === undefined || dirHandle === null) {
-      console.info("Cancel directory pickup");
-      notificationsDispatch({
+    console.debug("SET_DATASETS: ", datasets);
+    if (datasets.length === 0) {
+      return notificationsDispatch({
         type: "NOTIFY",
         payload: {
           open: true,
-          msg: t("sidebar.no_picked"),
+          msg: t("dataset.no_images"),
           severity: sv.WARNING,
         },
       });
-      return;
     }
-    const datasets = await createDataset(dirHandle);
     dispatch({ type: "SET_DATASETS", payload: datasets });
   }
 
@@ -74,7 +124,7 @@ export function Sidebar() {
         }}
       >
         <List id="sidebar-list">
-          <ListItem disablePadding onClick={verifyPermission}>
+          <ListItem disablePadding onClick={loadDataset}>
             <ListItemButton>
               <ListItemIcon>
                 <FileUploadIcon />

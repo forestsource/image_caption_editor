@@ -19,7 +19,7 @@ import SellIcon from "@mui/icons-material/Sell";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
-import { processStringWithRegexp } from "../RegexpUtil";
+import { processStringWithRegexp } from "../utils/RegexpUtil";
 
 export function Replacer() {
   const { t } = useTranslation();

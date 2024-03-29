@@ -1,5 +1,6 @@
-import { Dataset, Image, Caption } from "./types";
+import { Dataset, Image, Caption } from "../types";
 import { tagSplitter } from "./TagUtils";
+import { DirectoryLoadError, InvalidFileTypeError } from "../Errors";
 
 const filenameWithoutExtention = (path: string) => {
   if (path === "" || path === undefined) {
@@ -12,12 +13,14 @@ const filenameWithoutExtention = (path: string) => {
   return basename.split(".")[0];
 };
 
-
 export const createDataset = async (dirHandle: FileSystemDirectoryHandle) => {
   const datasets: Dataset[] = [];
   const images: Image[] = [];
   const captions: Caption[] = [];
-  for await (const [, value] of dirHandle.entries()) {
+  for await (let [, value] of dirHandle.entries()) {
+    if (value.kind !== "file") {
+      continue;
+    }
     const fh = dirHandle.getFileHandle(value.name);
     const file: File = await (await fh).getFile();
     const file_uri: string = window.URL.createObjectURL(file);
@@ -49,9 +52,30 @@ export const createDataset = async (dirHandle: FileSystemDirectoryHandle) => {
       datasets.push({ name: image.name, image, caption, dirHandle });
     } else {
       console.info("caption not found for image", image);
-      const caption: Caption = { name: image.name, uri: "", content: [] };
+      const captionName = filenameWithoutExtention(image.name) + ".txt";
+      const caption: Caption = { name: captionName, uri: "", content: [] };
       datasets.push({ name: image.name, image, caption, dirHandle });
     }
   }
+  console.debug("return:", datasets);
   return datasets;
 };
+
+export async function loadDatasetFolder(): Promise<Dataset[]>{
+    let dirHandle = null;
+    try {
+      dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+      return createDataset(dirHandle);
+    } catch (e) {
+      if (e instanceof DOMException) {
+        if (e.name === "AbortError") {
+          throw new DirectoryLoadError("Cancel directory pickup");
+        } 
+      } 
+      if(e instanceof TypeError) {
+        throw new InvalidFileTypeError("Invalid file type");
+      } 
+      console.error(e);
+      throw e;
+    }
+  }

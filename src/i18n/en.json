@@ -9,12 +9,20 @@
     "tags": "TAGs",
     "search": "Search"
   },
+  "dataset": {
+    "no_picked": "Cancel directory pickup",
+    "wrong_type": "Please select a folder that contains only image and text files.",
+    "unknown_error": "An unknown error occurred.",
+    "no_images": "No images found in the selected folder."
+  },
   "sidebar": {
     "load_dataset": "Load Dataset",
     "list": "List",
     "batch_edit": "Batch Processing",
-    "settings": "Settings",
-    "no_picked": "Cancel directory pickup"
+    "settings": "Settings"
+  },
+  "list": {
+    "no_dataset": "Please load the dataset first."
   },
   "editor": {
     "no_dataset": "No dataset loaded",

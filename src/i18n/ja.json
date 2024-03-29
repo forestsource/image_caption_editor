@@ -9,12 +9,20 @@
     "tags": "タグ",
     "search": "検索"
   },
+  "dataset": {
+    "no_picked": "フォルダ選択をキャンセルしました。",
+    "wrong_type": "画像とテキストファイルのみのフォルダを選択してください",
+    "unknown_error": "不明なエラーが発生しました。",
+    "no_images": "選択したフォルダに画像がありません。"
+  },
   "sidebar": {
     "load_dataset": "データセットを読み込む",
     "list": "リスト",
     "batch_edit": "バッチ処理",
-    "settings": "設定",
-    "no_picked": "フォルダ選択をキャンセルしました。"
+    "settings": "設定"
+  },
+  "list": {
+    "no_dataset": "先にデータセットを読み込んでください"
   },
   "editor": {
     "no_dataset": "データセットが読み込まれていません",

@@ -67,12 +67,13 @@ const datasetsReducer = (
           return { ...state };
         }
         const writable = await fileHandle.createWritable();
-        const captionStr = targetDataset?.caption.content.join(",");
+        const captionStr = targetDataset?.caption.content.join(", ");
         const result_write = await writable.write(captionStr);
         const result_close = await writable.close();
         if (result_write != null || result_close != null) {
           console.error("Caption cannot save");
         }
+        console.debug("Caption saved");
       };
       saveCaption();
       return { ...state };

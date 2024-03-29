@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv, suggestionTags } from "../types";
-import { loadSuggestionTags, searchIncludeComplement } from "../TagUtils";
+import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
 
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 

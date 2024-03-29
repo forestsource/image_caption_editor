@@ -25,7 +25,7 @@ import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { TagEditorContext } from "../Contexts/TagEditorContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
-import { loadSuggestionTags, searchIncludeComplement } from "../TagUtils";
+import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
 
 // DnD
 import {

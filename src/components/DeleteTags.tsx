@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
-import { tagCount, filterdTags } from "../TagUtils";
+import { tagCount, filterdTags } from "../utils/TagUtils";
 
 interface TagChip {
   tagName: string;

@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import { suggestionTags } from "./types";
+import { suggestionTags } from "../types";
 import { isValidRegex } from "./RegexpUtil";
 
 export function tagSplitter(tags: string): string[] {

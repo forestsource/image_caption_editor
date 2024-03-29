@@ -2,7 +2,7 @@ import { useContext } from "react";
 import Box from "@mui/material/Box";
 
 import { DatasetsContext } from "../Contexts/DatasetsContext";
-import { tagCount } from "../TagUtils";
+import { tagCount } from "../utils/TagUtils";
 
 import {
   BarChart,
