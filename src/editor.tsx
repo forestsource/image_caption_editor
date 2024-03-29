@@ -20,7 +20,7 @@ import { useTranslation } from "react-i18next";
 
 import { useHotkeys } from "react-hotkeys-hook";
 import Papa from "papaparse";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./App.css";
 import type { Dataset, Image, Caption, suggestionTags } from "./types";
@@ -60,13 +60,12 @@ export function Editor() {
     useContext(DatasetsContext);
   const { state: tagEditorState, dispatch: tagEditorDispatch } =
     useContext(TagEditorContext);
-  const { state: notificationsState, dispatch: notificationsDispatch } =
-    useContext(NotificationsContext);
+  const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
   const datasets = datasetsState.datasets;
-  let tags = tagEditorState.currentTags;
-  let { pageId } = useParams();
+  const tags = tagEditorState.currentTags;
+  const { pageId } = useParams();
   let pageIndex: number = parseInt(pageId!);
-  let dataset = () => {
+  const dataset = () => {
     let dataset: Dataset;
     if (datasets.length === 0) {
       dataset = {
@@ -99,8 +98,8 @@ export function Editor() {
       header: false,
       dynamicTyping: false,
     });
-    const results: string[][] = parsedCsvData.data as any[][];
-    let suggestionTags: suggestionTags[] = [];
+    const results: string[][] = parsedCsvData.data as string[][];
+    const suggestionTags: suggestionTags[] = [];
     results.forEach((result) => {
       let destabilizedTag: string[] = [];
       if (result[3] !== undefined) {
@@ -178,10 +177,10 @@ export function Editor() {
   );
 
   const onChangeTags = (
-    event: React.SyntheticEvent,
+    _event: React.SyntheticEvent,
     value: string[],
-    reason: AutocompleteChangeReason,
-    details?: AutocompleteChangeDetails<string> | undefined
+    _reason: AutocompleteChangeReason,
+    _details?: AutocompleteChangeDetails<string> | undefined
   ) => {
     console.log("onChangeTags: ", value);
     dataset().caption.content = value;
@@ -206,13 +205,13 @@ export function Editor() {
     if (state.inputValue.length <= INPUT_LENGTH_ENABLE_AUTOCOMPLETE) {
       return [];
     }
-    let fuzzySearch = suggestionTags.filter((suggestionTag) => {
+    const fuzzySearch = suggestionTags.filter((suggestionTag) => {
       return suggestionTag.destabilizedTags.includes(state.inputValue);
     });
-    let partialMatch = suggestionTags.filter((suggestionTag) => {
+    const partialMatch = suggestionTags.filter((suggestionTag) => {
       return suggestionTag.normalizedTag.includes(state.inputValue);
     });
-    let result = fuzzySearch.concat(partialMatch);
+    const result = fuzzySearch.concat(partialMatch);
     return result.map((suggestionTag) => suggestionTag.normalizedTag);
   };
 
@@ -235,7 +234,7 @@ export function Editor() {
     console.debug("pageChange: ", index);
     navigate(`/edit/${index}`, { state: { id: index } });
   };
-  let nextDataset = () => {
+  const nextDataset = () => {
     if (pageIndex + 1 < datasets.length) {
       pageIndex++;
       console.info(pageId);
@@ -251,7 +250,7 @@ export function Editor() {
       });
     }
   };
-  let prevDataset = () => {
+  const prevDataset = () => {
     if (pageIndex - 1 > -1) {
       pageIndex--;
       pageChange(pageIndex);

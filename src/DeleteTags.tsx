@@ -29,8 +29,7 @@ const isValidRegex = (userInput: string): boolean => {
 export function DeleteTags() {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(DatasetsContext);
-  const { state: notificationsState, dispatch: notificationsDispatch } =
-    useContext(NotificationsContext);
+  const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
   const datasets = state.datasets;
   const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
   const allTags = (): TagChip[] => {

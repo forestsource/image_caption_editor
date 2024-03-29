@@ -38,14 +38,13 @@ const settingsReducer = (
           preferredLanguage: action.payload,
         },
       };
-    case "USE_USER_DEFAULT":
+    case "USE_USER_DEFAULT": {
       const savedSetting = localStorage.getItem("setting");
       if (savedSetting) {
         const settings = JSON.parse(savedSetting);
         i18n.changeLanguage(settings.preferredLanguage);
         return { ...state, setting: settings };
       }
-
       // read user system setting
       const isDarkMode =
         window.matchMedia &&
@@ -65,6 +64,7 @@ const settingsReducer = (
           preferredLanguage: lang,
         },
       };
+    }
     case "SAVE_SETTING":
       localStorage.setItem("setting", JSON.stringify(state.setting));
       return { ...state, setting: action.payload };

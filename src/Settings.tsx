@@ -18,11 +18,10 @@ import Typography from "@mui/material/Typography";
 export function Settings() {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(SettingsContext);
-  const { state: notificationsState, dispatch: notificationsDispatch } =
-    useContext(NotificationsContext);
+  const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
 
   const handleThemeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let setting = { ...state.setting, darkMode: event.target.checked };
+    const setting = { ...state.setting, darkMode: event.target.checked };
     dispatch({
       type: "SET_SETTING",
       payload: setting,

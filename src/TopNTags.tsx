@@ -1,6 +1,5 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
 
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 
@@ -21,7 +20,7 @@ interface statics {
 const TOP_N_TAGS = 25;
 
 export function TopNTags() {
-  const { state, dispatch } = useContext(DatasetsContext);
+  const { state } = useContext(DatasetsContext);
   const datasets = state.datasets;
   const allTags = datasets.flatMap((dataset) => dataset.caption.content);
   const statics = (): statics[] => {
@@ -38,7 +37,7 @@ export function TopNTags() {
       usageRatio: (count / datasets.length) * 100,
     }));
   };
-  let topNTags = statics()
+  const topNTags = statics()
     .sort((a, b) => b.usageRatio - a.usageRatio)
     .slice(0, TOP_N_TAGS);
 

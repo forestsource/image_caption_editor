@@ -4,6 +4,7 @@ import { createTheme } from "@mui/material/styles";
 import { SettingsContext } from "./Contexts/SettingsContext";
 
 export const ThemeProviderCustom: React.FC<{ children: React.ReactNode }> = ({
+  // eslint-disable-next-line react/prop-types
   children,
 }) => {
   const { state, dispatch } = useContext(SettingsContext);
@@ -41,5 +42,6 @@ export const ThemeProviderCustom: React.FC<{ children: React.ReactNode }> = ({
     },
   });
 
+  // eslint-disable-next-line react/prop-types
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
 };

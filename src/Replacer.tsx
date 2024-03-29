@@ -35,8 +35,7 @@ function processStringWithRegex(str: string, regexInput: string): string {
 
 export function Replacer() {
   const { t } = useTranslation();
-  const { state: notificationsState, dispatch: notificationsDispatch } =
-    useContext(NotificationsContext);
+  const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
   const [beforeTag, setBeforeTag] = React.useState("");
   const [afterTag, setAfterTag] = React.useState("");
   const [selectedPartialTag, setSelectedPartialTag] = React.useState("");
@@ -102,10 +101,10 @@ export function Replacer() {
     dispatch({ type: "SET_DATASETS", payload: datasets });
   };
   const onChangeBeforeTag = (
-    event: React.SyntheticEvent<Element, Event>,
+    _event: React.SyntheticEvent<Element, Event>,
     value: string | null,
-    reason: AutocompleteChangeReason,
-    details?: AutocompleteChangeDetails<string> | undefined
+    _reason: AutocompleteChangeReason,
+    _details?: AutocompleteChangeDetails<string> | undefined
   ) => {
     if (value === null) {
       value = "";
@@ -113,10 +112,10 @@ export function Replacer() {
     setBeforeTag(value);
   };
   const onChangePartialTag = (
-    event: React.SyntheticEvent<Element, Event>,
+    _event: React.SyntheticEvent<Element, Event>,
     value: string | null,
-    reason: AutocompleteChangeReason,
-    details?: AutocompleteChangeDetails<string> | undefined
+    _reason: AutocompleteChangeReason,
+    _details?: AutocompleteChangeDetails<string> | undefined
   ) => {
     if (value === null) {
       value = "";

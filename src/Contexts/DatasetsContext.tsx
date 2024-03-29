@@ -45,7 +45,7 @@ const datasetsReducer = (
         dataset.caption.content = newCaptionContent;
       });
       return { ...state };
-    case "SAVE_CAPTION":
+    case "SAVE_CAPTION": {
       const saveCaption = async () => {
         const targetDataset = state.datasets.find((dataset) => {
           return dataset.name === action.payload.name;
@@ -75,6 +75,7 @@ const datasetsReducer = (
       };
       saveCaption();
       return { ...state };
+    }
     default:
       return state;
   }

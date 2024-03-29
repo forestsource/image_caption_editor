@@ -25,10 +25,8 @@ const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
 export function AddTags() {
   const { t } = useTranslation();
-  const { state: notificationsState, dispatch: notificationsDispatch } =
-    useContext(NotificationsContext);
-  const { state: DataSetState, dispatch: DataSetDispatch } =
-    useContext(DatasetsContext);
+  const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
+  const { dispatch: DataSetDispatch } = useContext(DatasetsContext);
   const { state, dispatch } = useContext(DatasetsContext);
   const datasets = state.datasets;
   const [suggestionTags, setSuggestionTags] = React.useState<suggestionTags[]>(
@@ -48,8 +46,8 @@ export function AddTags() {
       header: false,
       dynamicTyping: false,
     });
-    const results: string[][] = parsedCsvData.data as any[][];
-    let suggestionTags: suggestionTags[] = [];
+    const results: string[][] = parsedCsvData.data as string[][];
+    const suggestionTags: suggestionTags[] = [];
     results.forEach((result) => {
       let destabilizedTag: string[] = [];
       if (result[3] !== undefined) {
@@ -65,19 +63,19 @@ export function AddTags() {
 
   /* Autocomplete filter */
   const optionFilter = (
-    options: string[],
+    _options: string[],
     state: FilterOptionsState<string>
   ): string[] => {
     if (state.inputValue.length <= INPUT_LENGTH_ENABLE_AUTOCOMPLETE) {
       return [];
     }
-    let fuzzySearch = suggestionTags.filter((suggestionTag) => {
+    const fuzzySearch = suggestionTags.filter((suggestionTag) => {
       return suggestionTag.destabilizedTags.includes(state.inputValue);
     });
-    let partialMatch = suggestionTags.filter((suggestionTag) => {
+    const partialMatch = suggestionTags.filter((suggestionTag) => {
       return suggestionTag.normalizedTag.includes(state.inputValue);
     });
-    let result = fuzzySearch.concat(partialMatch);
+    const result = fuzzySearch.concat(partialMatch);
     return result.map((suggestionTag) => suggestionTag.normalizedTag);
   };
 
@@ -92,10 +90,10 @@ export function AddTags() {
   };
 
   const onChangeTag = (
-    event: React.SyntheticEvent,
+    _event: React.SyntheticEvent,
     value: string | null,
-    reason: AutocompleteChangeReason,
-    details?: AutocompleteChangeDetails<string> | undefined
+    _reason: AutocompleteChangeReason,
+    _details?: AutocompleteChangeDetails<string> | undefined
   ) => {
     console.debug("onChangeTag: ", value);
     setAddTag(value || "");

@@ -10,31 +10,8 @@ import Box from "@mui/material/Box";
 import type { Dataset } from "./types";
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 
-const cardStyle = {
-  width: "18rem",
-  height: "20rem",
-  padding: "10px",
-  border: "none",
-  cursor: "pointer",
-};
-const cardStyleHover = {
-  backgroundColor: "var(--bs-primary)",
-  top: "-0.5em",
-  boxShadow: "0 2px 3px rgba(0, 0, 0, 0.3)",
-};
-
-const bigOnHover = {
-  height: "100%",
-  "&:hover": {
-    // backgroundColor: 'primary.main',
-    opacity: [0.9, 0.8, 0.7],
-    margin: -1,
-    boxShadow: 1,
-  },
-};
-
 export function ListDirectory() {
-  const { state, dispatch } = useContext(DatasetsContext);
+  const { state } = useContext(DatasetsContext);
   const datasets = state.datasets;
   const navigate = useNavigate();
 

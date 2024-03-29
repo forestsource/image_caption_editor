@@ -24,11 +24,11 @@ import { Severity as sv } from "./types";
 
 const drawerWidth = 3 / 12;
 
-let filenameWithoutExtention = (path: string) => {
+const filenameWithoutExtention = (path: string) => {
   if (path === "" || path === undefined) {
     return "";
   }
-  let basename = path.split("/").pop();
+  const basename = path.split("/").pop();
   if (basename === undefined) {
     return "";
   }
@@ -38,8 +38,7 @@ let filenameWithoutExtention = (path: string) => {
 export function Sidebar() {
   const { t } = useTranslation();
   const { state, dispatch } = useContext(DatasetsContext);
-  const { state: notificationsState, dispatch: notificationsDispatch } =
-    useContext(NotificationsContext);
+  const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
   const datasets = state.datasets;
 
   async function verifyPermission() {
@@ -82,12 +81,11 @@ export function Sidebar() {
 
   async function createDataset(dirHandle: FileSystemDirectoryHandle) {
     console.debug("createDataset");
-    let datasets: Dataset[] = [];
-    let images: Image[] = [];
-    let captions: Caption[] = [];
-    for await (const [key, value] of dirHandle.entries()) {
+    const datasets: Dataset[] = [];
+    const images: Image[] = [];
+    const captions: Caption[] = [];
+    for await (const [, value] of dirHandle.entries()) {
       const fh = dirHandle.getFileHandle(value.name);
-      const name = (await fh).name;
       const file: File = await (await fh).getFile();
       const file_uri: string = window.URL.createObjectURL(file);
       if (
