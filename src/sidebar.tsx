@@ -163,7 +163,7 @@ export function Sidebar() {
                 <ListIcon />
               </ListItemIcon>
               <ListItemText
-                primary="List"
+                primary={t("sidebar.list")}
                 onClick={() => {
                   navigate("/");
                 }}
@@ -176,7 +176,7 @@ export function Sidebar() {
                 <BurstModeIcon />
               </ListItemIcon>
               <ListItemText
-                primary="Batch Edit"
+                primary={t("sidebar.batch_edit")}
                 onClick={() => {
                   navigate("/batchEdit");
                 }}
@@ -189,7 +189,7 @@ export function Sidebar() {
                 <SettingsIcon />
               </ListItemIcon>
               <ListItemText
-                primary="Settings"
+                primary={t("sidebar.settings")}
                 onClick={() => {
                   navigate("/settings");
                 }}
