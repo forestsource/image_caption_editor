@@ -26,13 +26,7 @@ export function Settings() {
     });
   };
   const handleLanguageChange = (event: SelectChangeEvent<pl>) => {
-    dispatch({
-      type: "SET_SETTING",
-      payload: {
-        ...state.setting,
-        preferredLanguage: event.target.value as pl,
-      },
-    });
+    dispatch({ type: "CHANGE_LANGUAGE", payload: event.target.value as pl });
   };
   const handleSave = () => {
     dispatch({

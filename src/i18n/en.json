@@ -1,0 +1,9 @@
+{
+  "general": {
+    "save": "Save",
+    "saveALL": "Save All"
+  },
+  "sidebar": {
+    "load_dataset": "Load Dataset"
+  }
+}

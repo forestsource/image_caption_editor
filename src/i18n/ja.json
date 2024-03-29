@@ -1,0 +1,9 @@
+{
+  "general": {
+    "save": "保存",
+    "saveALL": "すべて保存"
+  },
+  "sidebar": {
+    "load_dataset": "データセットを読み込む"
+  }
+}

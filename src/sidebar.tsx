@@ -11,6 +11,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ListIcon from "@mui/icons-material/List";
 import Divider from "@mui/material/Divider";
+import { useTranslation } from "react-i18next";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -35,6 +36,7 @@ let filenameWithoutExtention = (path: string) => {
 };
 
 export function Sidebar() {
+  const { t } = useTranslation();
   const { state, dispatch } = useContext(DatasetsContext);
   const { state: notificationsState, dispatch: notificationsDispatch } =
     useContext(NotificationsContext);
@@ -149,7 +151,10 @@ export function Sidebar() {
               <ListItemIcon>
                 <FileUploadIcon />
               </ListItemIcon>
-              <ListItemText primary="Load Dataset" onClick={verifyPermission} />
+              <ListItemText
+                primary={t("sidebar.load_dataset")}
+                onClick={verifyPermission}
+              />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>

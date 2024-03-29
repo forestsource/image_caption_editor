@@ -1,5 +1,6 @@
-import React, { createContext } from "react";
-import { useReducer } from "react";
+import React, { createContext, useReducer } from "react";
+import i18n from "i18next";
+
 import { Setting } from "../types";
 import { PreferredLanguage as pl } from "../types";
 
@@ -10,6 +11,7 @@ type SettingsState = {
 type SettingsAction =
   | { type: "SET_SETTING"; payload: Setting }
   | { type: "USE_USER_DEFAULT" }
+  | { type: "CHANGE_LANGUAGE"; payload: pl }
   | { type: "SAVE_SETTING"; payload: Setting };
 
 const SettingsContext = createContext<{
@@ -27,6 +29,15 @@ const settingsReducer = (
   switch (action.type) {
     case "SET_SETTING":
       return { ...state, setting: action.payload };
+    case "CHANGE_LANGUAGE":
+      i18n.changeLanguage(action.payload);
+      return {
+        ...state,
+        setting: {
+          ...state.setting,
+          preferredLanguage: action.payload,
+        },
+      };
     case "USE_USER_DEFAULT":
       const isDarkMode =
         window.matchMedia &&
@@ -37,6 +48,7 @@ const settingsReducer = (
       } else {
         lang = pl.EN;
       }
+      i18n.changeLanguage(lang);
       return {
         ...state,
         setting: {
