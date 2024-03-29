@@ -16,6 +16,7 @@ import Autocomplete, {
   AutocompleteChangeReason,
   AutocompleteChangeDetails,
 } from "@mui/material/Autocomplete";
+import { useTranslation } from "react-i18next";
 
 import { useHotkeys } from "react-hotkeys-hook";
 import Papa from "papaparse";
@@ -54,6 +55,7 @@ interface SortableItemProps {
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
 export function Editor() {
+  const { t } = useTranslation();
   const { state: datasetsState, dispatch: datasetsDispatch } =
     useContext(DatasetsContext);
   const { state: tagEditorState, dispatch: tagEditorDispatch } =
@@ -68,7 +70,7 @@ export function Editor() {
     let dataset: Dataset;
     if (datasets.length === 0) {
       dataset = {
-        name: "No dataset",
+        name: t("editor.no_dataset"),
         image: { uri: "" } as Image,
         caption: { name: "", uri: "", content: [] } as Caption,
       } as Dataset;
@@ -222,7 +224,7 @@ export function Editor() {
     datasetsDispatch({ type: "SAVE_CAPTION", payload: dataset() });
     notificationsDispatch({
       type: "NOTIFY",
-      payload: { open: true, msg: "Caption saved", severity: sv.SUCCESS },
+      payload: { open: true, msg: t("general.saved"), severity: sv.SUCCESS },
     });
     console.info(`onSave: ${dataset().caption.name}`);
   }
@@ -241,7 +243,11 @@ export function Editor() {
     } else {
       notificationsDispatch({
         type: "NOTIFY",
-        payload: { open: true, msg: "This page is last", severity: sv.INFO },
+        payload: {
+          open: true,
+          msg: t("editor.msg.page_last"),
+          severity: sv.INFO,
+        },
       });
     }
   };
@@ -252,7 +258,11 @@ export function Editor() {
     } else {
       notificationsDispatch({
         type: "NOTIFY",
-        payload: { open: true, msg: "This page is first", severity: sv.INFO },
+        payload: {
+          open: true,
+          msg: t("editor.msg.page_first"),
+          severity: sv.INFO,
+        },
       });
     }
   };
@@ -290,7 +300,11 @@ export function Editor() {
               getOptionLabel={(option) => option}
               sx={{ maxHeight: 1 / 1, maxWidth: 1 / 1 }}
               renderInput={(params) => (
-                <TextField {...params} label="Tags" variant="filled" />
+                <TextField
+                  {...params}
+                  label={t("general.tags")}
+                  variant="filled"
+                />
               )}
               onChange={onChangeTags}
               renderTags={(tagValue, getTagProps) => {
@@ -332,7 +346,7 @@ export function Editor() {
                 variant="extended"
                 onClick={onSaveCaption}
               >
-                <SaveIcon sx={{ mr: 1 }} /> Save
+                <SaveIcon sx={{ mr: 1 }} /> {t("general.save")}
               </Fab>
             </Box>
           </CardContent>

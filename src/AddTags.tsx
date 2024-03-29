@@ -13,6 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import SaveIcon from "@mui/icons-material/Save";
+import { useTranslation } from "react-i18next";
 
 import Papa from "papaparse";
 
@@ -23,6 +24,7 @@ import { Severity as sv, suggestionTags } from "./types";
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
 export function AddTags() {
+  const { t } = useTranslation();
   const { state: notificationsState, dispatch: notificationsDispatch } =
     useContext(NotificationsContext);
   const { state: DataSetState, dispatch: DataSetDispatch } =
@@ -85,7 +87,7 @@ export function AddTags() {
     });
     notificationsDispatch({
       type: "NOTIFY",
-      payload: { open: true, msg: "Saved", severity: sv.SUCCESS },
+      payload: { open: true, msg: t("general.saved"), severity: sv.SUCCESS },
     });
   };
 
@@ -104,7 +106,6 @@ export function AddTags() {
   };
 
   const handleAdd = () => {
-    // addTag を 全てのデータセットに追加
     datasets.forEach((dataset) => {
       if (insertTo === "prefix") {
         dataset.caption.content = [addTag].concat(dataset.caption.content);
@@ -125,7 +126,7 @@ export function AddTags() {
           variant="extended"
           onClick={onSaveCaption}
         >
-          <SaveIcon sx={{ mr: 1 }} /> Save All
+          <SaveIcon sx={{ mr: 1 }} /> {t("general.save_all")}
         </Fab>
         <Box sx={{ padding: "1em" }}>
           <Autocomplete
@@ -135,21 +136,21 @@ export function AddTags() {
             options={[]}
             onChange={onChangeTag}
             renderInput={(params) => (
-              <TextField {...params} label="Tag" value={addTag} />
+              <TextField {...params} label={t("general.tag")} value={addTag} />
             )}
           />
         </Box>
         <Box sx={{ padding: "1em" }}>
-          <InputLabel id="Insert-to-label">Insert to...</InputLabel>
+          <InputLabel id="Insert-to-label">{t("add_tag.insert_to")}</InputLabel>
           <Select
             labelId="Insert-to-label"
             id="Insert-to-select"
             value={insertTo}
-            label="Insert to"
+            label={t("add_tag.insert_to")}
             onChange={handleInsertToChange}
           >
-            <MenuItem value={"prefix"}>Prefix</MenuItem>
-            <MenuItem value={"suffix"}>Suffix</MenuItem>
+            <MenuItem value={"prefix"}>{t("general.prefix")}</MenuItem>
+            <MenuItem value={"suffix"}>{t("general.suffix")}</MenuItem>
           </Select>
           <Button
             sx={{ marginLeft: "2em" }}
@@ -157,7 +158,7 @@ export function AddTags() {
             disabled={addTag === ""}
             onClick={handleAdd}
           >
-            Add Tag
+            {t("add_tag.add_tag_btn")}
           </Button>
         </Box>
       </Box>

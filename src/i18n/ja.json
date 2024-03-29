@@ -1,9 +1,52 @@
 {
   "general": {
     "save": "保存",
-    "saveALL": "すべて保存"
+    "save_all": "すべて保存",
+    "saved": "保存済み",
+    "prefix": "先頭",
+    "suffix": "末尾",
+    "tag": "タグ",
+    "tags": "タグ",
+    "search": "検索"
   },
   "sidebar": {
-    "load_dataset": "データセットを読み込む"
+    "load_dataset": "データセットを読み込む",
+    "list": "リスト",
+    "batch_edit": "バッチ処理",
+    "settings": "設定"
+  },
+  "editor": {
+    "no_dataset": "データセットが読み込まれていません",
+    "msg": {
+      "page_first": "これは最初のページです",
+      "page_last": "これは最後のページです"
+    }
+  },
+  "batch": {
+    "tab": {
+      "delete": "タグを削除",
+      "add": "タグを追加",
+      "replace": "タグを置換",
+      "statistics": "統計"
+    }
+  },
+  "replace": {
+    "replace": "置換",
+    "replace_tag": "タグを置換",
+    "before_tag": "タグの前",
+    "after_tag": "タグの後",
+    "before_string": "前の文字列",
+    "after_string": "後の文字列",
+    "replace_partial_tag": "タグの一部を置換",
+    "target_tag": "対象のタグ",
+    "regexp_per_tag": "正規表現"
+  },
+  "settings": {
+    "darkmode": "ダークモード",
+    "language": "言語"
+  },
+  "add_tag": {
+    "insert_to": "挿入位置",
+    "add_tag_btn": "タグを追加"
   }
 }

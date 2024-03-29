@@ -1,9 +1,52 @@
 {
   "general": {
     "save": "Save",
-    "saveALL": "Save All"
+    "save_all": "Save All",
+    "saved": "Saved",
+    "prefix": "Head",
+    "suffix": "End",
+    "tag": "TAG",
+    "tags": "TAGs",
+    "search": "Search"
   },
   "sidebar": {
-    "load_dataset": "Load Dataset"
+    "load_dataset": "Load Dataset",
+    "list": "List",
+    "batch_edit": "Batch Processing",
+    "settings": "Settings"
+  },
+  "editor": {
+    "no_dataset": "No dataset loaded",
+    "msg": {
+      "page_first": "This is the first page",
+      "page_last": "This is the last page"
+    }
+  },
+  "batch": {
+    "tab": {
+      "delete": "Delete TAG",
+      "add": "Add TAG",
+      "replace": "Replace TAG",
+      "statistics": "Statistics"
+    }
+  },
+  "replace": {
+    "replace": "Replace",
+    "replace_tag": "Replace a TAG",
+    "before_tag": "Before TAG",
+    "after_tag": "After TAG",
+    "before_string": "Previous String",
+    "after_string": "Subsequent String",
+    "replace_partial_tag": "Replace Part of a Tag",
+    "target_tag": "Target TAG",
+    "regexp_per_tag": "Regexp"
+  },
+  "settings": {
+    "darkmode": "Dark Mode",
+    "language": "Language"
+  },
+  "add_tag": {
+    "insert_to": "Insert to",
+    "add_tag_btn": "Add TAG"
   }
 }

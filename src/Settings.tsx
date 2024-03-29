@@ -8,12 +8,15 @@ import InputLabel from "@mui/material/InputLabel";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import { useTranslation } from "react-i18next";
 
 import { SettingsContext } from "./Contexts/SettingsContext";
 import { NotificationsContext } from "./Contexts/NotificationsContext";
 import { PreferredLanguage as pl, Severity as sv } from "./types";
+import Typography from "@mui/material/Typography";
 
 export function Settings() {
+  const { t } = useTranslation();
   const { state, dispatch } = useContext(SettingsContext);
   const { state: notificationsState, dispatch: notificationsDispatch } =
     useContext(NotificationsContext);
@@ -37,7 +40,7 @@ export function Settings() {
       type: "NOTIFY",
       payload: {
         open: true,
-        msg: "Setting saved",
+        msg: t("general.saved"), // Fix this line
         severity: sv.SUCCESS,
       },
     });
@@ -50,13 +53,13 @@ export function Settings() {
           <FormControlLabel
             checked={state.setting.darkMode}
             control={<Switch onChange={handleThemeChange} />}
-            label="dark mode"
+            label={t("settings.darkmode")}
           />
         </Box>
         <Box sx={{ paddingTop: "1em" }}>
           <FormControl>
             <InputLabel id="prefferedlanguage-select-label">
-              Language
+              {t("settings.language")}
             </InputLabel>
             <Select
               labelId="prefferedlanguage-select-label"
@@ -65,14 +68,19 @@ export function Settings() {
               label="langugage"
               onChange={handleLanguageChange}
             >
-              <MenuItem value={pl.EN}>English</MenuItem>
-              <MenuItem value={pl.JA}>Japanese</MenuItem>
+              <MenuItem value={pl.EN}>
+                {" "}
+                <Typography>English</Typography>
+              </MenuItem>
+              <MenuItem value={pl.JA}>
+                <Typography>日本語</Typography>
+              </MenuItem>
             </Select>
           </FormControl>
         </Box>
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button variant="outlined" onClick={handleSave}>
-            Save
+            {t("general.save")}
           </Button>
         </Box>
       </Box>

@@ -9,7 +9,8 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import Button from "@mui/material/Button";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import { useTranslation } from "react-i18next";
 
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -33,6 +34,7 @@ function processStringWithRegex(str: string, regexInput: string): string {
 }
 
 export function Replacer() {
+  const { t } = useTranslation();
   const { state: notificationsState, dispatch: notificationsDispatch } =
     useContext(NotificationsContext);
   const [beforeTag, setBeforeTag] = React.useState("");
@@ -53,7 +55,7 @@ export function Replacer() {
     });
     notificationsDispatch({
       type: "NOTIFY",
-      payload: { open: true, msg: "Saved", severity: sv.SUCCESS },
+      payload: { open: true, msg: t("general.saved"), severity: sv.SUCCESS },
     });
   };
   const replaceATag = () => {
@@ -89,7 +91,7 @@ export function Replacer() {
           result = processStringWithRegex(tag, regexpString);
         } catch {
           console.info("regexp is invalid: ", regexpString);
-          // TODP: format error を表示する
+          // TODO: format error を表示する
           return tag;
         }
         console.debug(result, tag, regexpString);
@@ -131,12 +133,12 @@ export function Replacer() {
           variant="extended"
           onClick={onSaveCaption}
         >
-          <SaveIcon sx={{ mr: 1 }} /> Save All
+          <SaveIcon sx={{ mr: 1 }} /> {t("general.save_all")}
         </Fab>
       </Box>
       <Box sx={{ padding: "1em" }} id="replace-a-tag-box">
         <Typography>
-          Replace a tag <SellIcon />
+          {t("replace.replace_tag")} <SellIcon />
         </Typography>
         <Grid container spacing={0}>
           <Grid item xs={5}>
@@ -145,7 +147,11 @@ export function Replacer() {
               options={allTags}
               onChange={onChangeBeforeTag}
               renderInput={(params) => (
-                <TextField {...params} label="before tag" value={beforeTag} />
+                <TextField
+                  {...params}
+                  label={t("replace.before_tag")}
+                  value={beforeTag}
+                />
               )}
             />
           </Grid>
@@ -162,7 +168,7 @@ export function Replacer() {
           </Grid>
           <Grid item xs={6}>
             <TextField
-              label="after tag"
+              label={t("replace.after_tag")}
               sx={{ width: "100%" }}
               value={afterTag}
               onChange={(e) => setAfterTag(e.target.value)}
@@ -177,13 +183,13 @@ export function Replacer() {
           }}
         >
           <Button variant="outlined" onClick={replaceATag}>
-            Replace
+            {t("replace.replace")}
           </Button>
         </Box>
       </Box>
       <Box sx={{ padding: "1em" }} id="replace-partial-tag-box">
         <Typography>
-          Replace partial tag <AbcIcon />
+          {t("replace.replace_partial_tag")} <AbcIcon />
         </Typography>
         <Autocomplete
           disablePortal
@@ -192,7 +198,7 @@ export function Replacer() {
           renderInput={(params) => (
             <TextField
               {...params}
-              label="target tag"
+              label={t("replace.target_tag")}
               value={selectedPartialTag}
             />
           )}
@@ -200,7 +206,7 @@ export function Replacer() {
         <Grid container spacing={0} sx={{ paddingTop: "1em" }}>
           <Grid item xs={5}>
             <TextField
-              label="before string"
+              label={t("replace.before_string")}
               sx={{ width: "100%" }}
               value={beforeStringPartialTag}
               onChange={(e) => setBeforeStringPartialTag(e.target.value)}
@@ -219,7 +225,7 @@ export function Replacer() {
           </Grid>
           <Grid item xs={5}>
             <TextField
-              label="after string"
+              label={t("replace.after_string")}
               sx={{ width: "100%" }}
               value={afterStringPartialTag}
               onChange={(e) => setAfterStringPartialTag(e.target.value)}
@@ -234,13 +240,13 @@ export function Replacer() {
           }}
         >
           <Button variant="outlined" onClick={replaceStringATag}>
-            Replace
+            {t("replace.replace")}
           </Button>
         </Box>
       </Box>
       <Box sx={{ padding: "1em" }} id="replace-regexp-box">
         <Typography>
-          Regexp per tag <b>( .* )</b>
+          {t("replace.regexp_per_tag")} <b>( .* )</b>
         </Typography>
         <TextField
           label="regexp"
@@ -256,7 +262,7 @@ export function Replacer() {
           }}
         >
           <Button variant="outlined" onClick={replaceRegexpPerTag}>
-            Replace
+            {t("replace.replace")}
           </Button>
         </Box>
       </Box>

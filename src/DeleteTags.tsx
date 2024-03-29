@@ -5,7 +5,8 @@ import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 import Fab from "@mui/material/Fab";
 import SaveIcon from "@mui/icons-material/Save";
-import { Avatar } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import { useTranslation } from "react-i18next";
 
 import { DatasetsContext } from "./Contexts/DatasetsContext";
 import { NotificationsContext } from "./Contexts/NotificationsContext";
@@ -26,6 +27,7 @@ const isValidRegex = (userInput: string): boolean => {
 };
 
 export function DeleteTags() {
+  const { t } = useTranslation();
   const { state, dispatch } = useContext(DatasetsContext);
   const { state: notificationsState, dispatch: notificationsDispatch } =
     useContext(NotificationsContext);
@@ -74,7 +76,7 @@ export function DeleteTags() {
       type: "NOTIFY",
       payload: {
         open: true,
-        msg: "Save All Tags",
+        msg: t("general.saved"),
         severity: sv.SUCCESS,
       },
     });
@@ -94,12 +96,12 @@ export function DeleteTags() {
             variant="extended"
             onClick={onSaveCaption}
           >
-            <SaveIcon sx={{ mr: 1 }} /> Save All
+            <SaveIcon sx={{ mr: 1 }} /> {t("general.save_all")}
           </Fab>
         </Box>
         <TextField
           id="tag-filter"
-          label="search"
+          label={t("general.search")}
           variant="standard"
           onChange={(event) => setFilter(event.target.value)}
           sx={{ textAlign: "right" }}

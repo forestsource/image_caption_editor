@@ -8,8 +8,10 @@ import { TopNTags } from "./TopNTags";
 import { DeleteTags } from "./DeleteTags";
 import { Replacer } from "./Replacer";
 import { AddTags } from "./AddTags";
+import { useTranslation } from "react-i18next";
 
 export function BatchEditor() {
+  const { t } = useTranslation();
   const { state, dispatch } = useContext(DatasetsContext);
   const datasets = state.datasets;
   const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
@@ -24,10 +26,10 @@ export function BatchEditor() {
   return (
     <Box>
       <Tabs value={tabValue} onChange={handleTabChange}>
-        <Tab label="Search&Delete All Tags" />
-        <Tab label="Add Tags" />
-        <Tab label="Replace Tags" />
-        <Tab label="Top N Tags" />
+        <Tab label={t("batch.tab.delete")} />
+        <Tab label={t("batch.tab.add")} />
+        <Tab label={t("batch.tab.replace")} />
+        <Tab label={t("batch.tab.statistics")} />
       </Tabs>
       {tabValue === 0 && <DeleteTags />}
       {tabValue === 1 && <AddTags />}
