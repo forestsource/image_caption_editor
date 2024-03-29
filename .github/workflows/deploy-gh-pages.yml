@@ -38,6 +38,8 @@ jobs:
         run: npm install
       - name: Build
         run: npm ci && npm run build
+        env:
+          PUBLIC_URL: /image_caption_editor
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
