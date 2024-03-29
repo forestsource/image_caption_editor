@@ -30,6 +30,7 @@ jobs:
       - name: Lint
         run: npm run lint
   build:
+    needs: lint
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
