@@ -11,10 +11,10 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ListIcon from "@mui/icons-material/List";
 import Divider from "@mui/material/Divider";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BurstModeIcon from "@mui/icons-material/BurstMode";
 import { useTranslation } from "react-i18next";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
@@ -56,24 +56,6 @@ export function Sidebar() {
         });
         return;
       } else {
-        let errMsg = String(e);
-        // This is a workaround for the error message not being caught by the above conditions
-        if (
-          errMsg.includes(
-            "The path supplied exists, but was not an entry of requested type."
-          )
-        ) {
-          console.info(e);
-          notificationsDispatch({
-            type: "NOTIFY",
-            payload: {
-              open: true,
-              msg: t("dataset.wrong_type"),
-              severity: sv.ERROR,
-            },
-          });
-          return;
-        }
         if (e instanceof Error) {
           console.error(e);
           console.error(e.name);
@@ -127,7 +109,7 @@ export function Sidebar() {
           <ListItem disablePadding onClick={loadDataset}>
             <ListItemButton>
               <ListItemIcon>
-                <FileUploadIcon />
+                <AddPhotoAlternateIcon />
               </ListItemIcon>
               <ListItemText primary={t("sidebar.load_dataset")} />
             </ListItemButton>
