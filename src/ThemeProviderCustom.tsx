@@ -33,6 +33,10 @@ export const ThemeProviderCustom: React.FC<{ children: React.ReactNode }> = ({
         '"Apple Color Emoji"',
         '"Segoe UI Emoji"',
         '"Segoe UI Symbol"',
+        '"メイリオ"',
+        '"Meiryo"',
+        '"Noto Sans JP"',
+        '"Yu Gothic"',
       ].join(","),
     },
   });
