@@ -15,6 +15,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+#FIXME: temporary workaround
+env:
+  CI: false
+
 jobs:
   build:
     environment:
