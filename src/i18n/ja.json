@@ -48,7 +48,8 @@
     "after_string": "後の文字列",
     "replace_partial_tag": "タグの一部を置換",
     "target_tag": "対象のタグ",
-    "regexp_per_tag": "正規表現"
+    "regexp_per_tag": "正規表現",
+    "regexp_helper": "regexpのフォーマットが正しくありません"
   },
   "settings": {
     "darkmode": "ダークモード",

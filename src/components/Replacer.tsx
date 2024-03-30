@@ -19,7 +19,7 @@ import SellIcon from "@mui/icons-material/Sell";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
-import { processStringWithRegexp } from "../utils/RegexpUtil";
+import { processStringWithRegexp, isValidRegex } from "../utils/RegexpUtil";
 
 export function Replacer() {
   const { t } = useTranslation();
@@ -31,6 +31,7 @@ export function Replacer() {
     React.useState("");
   const [afterStringPartialTag, setAfterStringPartialTag] = React.useState("");
   const [regexpString, setRegexpString] = React.useState("");
+  const [regexpError, setRegexpError] = React.useState(false);
   const { state, dispatch } = useContext(DatasetsContext);
   const datasets = state.datasets;
   const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
@@ -70,6 +71,15 @@ export function Replacer() {
     });
     dispatch({ type: "SET_DATASETS", payload: datasets });
   };
+  const handleReplaceString = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setRegexpString(e.target.value);
+    if (isValidRegex(val)) {
+      setRegexpError(false);
+      return;
+    }
+    setRegexpError(true);
+  };
   const replaceRegexpPerTag = () => {
     datasets.forEach((dataset) => {
       const newCaptionContent = dataset.caption.content.map((tag) => {
@@ -78,10 +88,8 @@ export function Replacer() {
           result = processStringWithRegexp(tag, regexpString);
         } catch {
           console.info("regexp is invalid: ", regexpString);
-          // TODO: format error を表示する
           return tag;
         }
-        console.debug(result, tag, regexpString);
         return result;
       });
       dataset.caption.content = newCaptionContent;
@@ -239,7 +247,9 @@ export function Replacer() {
           label="regexp"
           sx={{ paddingTop: "1em", width: "100%" }}
           value={regexpString}
-          onChange={(e) => setRegexpString(e.target.value)}
+          error={regexpError}
+          helperText={regexpError ? t("replace.regexp_helper") : ""}
+          onChange={handleReplaceString}
         />
         <Box
           sx={{

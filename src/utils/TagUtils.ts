@@ -57,9 +57,6 @@ export function tagCount(tags: string[]): { [key: string]: number } {
     if (filter === "" || filter === undefined) {
       return allTags;
     }
-    if (!isValidRegex(filter)) {
-      return [];
-    }
     const regex = new RegExp(filter, "i");
     return allTags.filter((tag) => {
       return tag.match(regex);

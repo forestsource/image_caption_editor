@@ -27,6 +27,7 @@ export function DeleteTags() {
   const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
 
   const allTagChips = (): TagChip[] => {
+    console.debug("filter:", filter);
     const tags = tagCount(filterdTags(filter, flatTags));
     return Object.entries(tags)
       .map(([tagName, count]) => ({
