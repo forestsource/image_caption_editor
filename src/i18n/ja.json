@@ -42,8 +42,8 @@
   "replace": {
     "replace": "置換",
     "replace_tag": "タグを置換",
-    "before_tag": "タグの前",
-    "after_tag": "タグの後",
+    "before_tag": "前のタグ",
+    "after_tag": "後のタグ",
     "before_string": "前の文字列",
     "after_string": "後の文字列",
     "replace_partial_tag": "タグの一部を置換",

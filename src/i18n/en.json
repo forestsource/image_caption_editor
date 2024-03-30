@@ -42,8 +42,8 @@
   "replace": {
     "replace": "Replace",
     "replace_tag": "Replace a TAG",
-    "before_tag": "Before TAG",
-    "after_tag": "After TAG",
+    "before_tag": "Previous TAG",
+    "after_tag": "Subsequent TAG",
     "before_string": "Previous String",
     "after_string": "Subsequent String",
     "replace_partial_tag": "Replace Part of a Tag",
