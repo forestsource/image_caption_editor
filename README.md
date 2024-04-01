@@ -1,5 +1,7 @@
 # Dataset Tag Editor
 
+![logo](/images/logo.png)
+
 https://forestsource.github.io/image_caption_editor/
 
 This is a React application built with TypeScript.
