@@ -13,6 +13,7 @@ import ListIcon from "@mui/icons-material/List";
 import Divider from "@mui/material/Divider";
 import SettingsIcon from "@mui/icons-material/Settings";
 import BurstModeIcon from "@mui/icons-material/BurstMode";
+import BugReportIcon from "@mui/icons-material/BugReport";
 import { useTranslation } from "react-i18next";
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 
@@ -91,6 +92,13 @@ export function Sidebar() {
     navigate(`/edit/${index}`, { state: { id: index } });
   };
 
+  const openIssuePage = () => {
+    window.open(
+      "https://github.com/forestsource/image_caption_editor/issues",
+      "_blank"
+    );
+  };
+
   return (
     <Box id="sidebar-box">
       <Drawer
@@ -154,6 +162,14 @@ export function Sidebar() {
             </ListItemButton>
           </ListItem>
         </List>
+        <ListItem disablePadding onClick={openIssuePage}>
+          <ListItemButton>
+            <ListItemIcon>
+              <BugReportIcon />
+            </ListItemIcon>
+            <ListItemText primary={t("sidebar.report")}></ListItemText>
+          </ListItemButton>
+        </ListItem>
         <Divider />
 
         <ImageList sx={{ maxHeight: "80vh" }} cols={2} gap={4}>

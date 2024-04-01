@@ -20,7 +20,8 @@
     "load_dataset": "Load Dataset",
     "list": "List",
     "batch_edit": "Batch Processing",
-    "settings": "Settings"
+    "settings": "Settings",
+    "report": "Report Bugs"
   },
   "list": {
     "no_dataset": "Please load the dataset first."

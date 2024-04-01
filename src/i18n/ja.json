@@ -20,7 +20,8 @@
     "load_dataset": "データセットを読み込む",
     "list": "リスト",
     "batch_edit": "バッチ処理",
-    "settings": "設定"
+    "settings": "設定",
+    "report": "バグ報告"
   },
   "list": {
     "no_dataset": "先にデータセットを読み込んでください"
