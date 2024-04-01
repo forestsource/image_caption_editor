@@ -37,6 +37,7 @@ export function ReplaceOneTag({
     });
     console.debug(datasets);
     updateDataset(datasets);
+    setAfterTag("");
   };
 
   const onChangeBeforeTag = (

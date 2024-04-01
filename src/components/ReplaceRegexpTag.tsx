@@ -33,6 +33,7 @@ export function ReplaceRegexpTag({
       dataset.caption.content = newCaptionContent;
     });
     updateDataset(datasets);
+    // Do not clear the regexp string after replacing
   };
 
   const handleReplaceString = (e: React.ChangeEvent<HTMLInputElement>) => {

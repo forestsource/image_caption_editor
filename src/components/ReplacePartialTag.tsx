@@ -37,6 +37,8 @@ export function ReplacePartialTag({
       value = "";
     }
     setSelectedPartialTag(value);
+    setBeforeStringPartialTag("");
+    setAfterStringPartialTag("");
   };
 
   const replaceStringATag = () => {
