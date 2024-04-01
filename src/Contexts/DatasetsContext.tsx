@@ -32,7 +32,7 @@ const datasetsReducer = (
       return { ...state, datasets: action.payload };
     case "ADD_DATASET":
       return { ...state, datasets: [...state.datasets, action.payload] };
-    case "UPDATE_DATASET":
+    case "UPDATE_DATASET": {
       const newDatasets = state.datasets.map((dataset) => {
         if (dataset.name === action.payload.name) {
           return action.payload;
@@ -40,6 +40,7 @@ const datasetsReducer = (
         return dataset;
       });
       return { ...state, datasets: newDatasets };
+    }
     case "REMOVE_DATASET":
       return {
         ...state,

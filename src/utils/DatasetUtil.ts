@@ -17,7 +17,7 @@ export const createDataset = async (dirHandle: FileSystemDirectoryHandle) => {
   const datasets: Dataset[] = [];
   const images: Image[] = [];
   const captions: Caption[] = [];
-  for await (let [, value] of dirHandle.entries()) {
+  for await (const [, value] of dirHandle.entries()) {
     if (value.kind !== "file") {
       continue;
     }
@@ -91,4 +91,4 @@ export function flatTags(datasets: Dataset[]): string[] {
     }
     return dataset.caption.content;
   });
-};
+}
