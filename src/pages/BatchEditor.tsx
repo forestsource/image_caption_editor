@@ -5,7 +5,7 @@ import Tab from "@mui/material/Tab";
 
 import { Statistics } from "../components/Statistics";
 import { DeleteTags } from "../components/DeleteTags";
-import { Replacer } from "../components/Replacer";
+import { BatchReplacer } from "../components/BatchReplacer";
 import { AddTags } from "../components/AddTags";
 import { useTranslation } from "react-i18next";
 
@@ -27,7 +27,7 @@ export function BatchEditor() {
       </Tabs>
       {tabValue === 0 && <DeleteTags />}
       {tabValue === 1 && <AddTags />}
-      {tabValue === 2 && <Replacer />}
+      {tabValue === 2 && <BatchReplacer />}
       {tabValue === 3 && <Statistics />}
     </Box>
   );
