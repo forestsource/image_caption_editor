@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
@@ -21,6 +21,10 @@ export function BatchReplacer() {
 
   const saveDatasets = (datasets: Dataset[]) => {
     dispatch({ type: "SET_DATASETS", payload: datasets });
+    notificationsDispatch({
+      type: "NOTIFY",
+      payload: { open: true, msg: t("replace.replaced"), severity: sv.SUCCESS },
+    });
   };
 
   const onSaveCaption = () => {

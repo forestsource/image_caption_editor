@@ -50,7 +50,8 @@
     "replace_partial_tag": "タグの一部を置換",
     "target_tag": "対象のタグ",
     "regexp_per_tag": "正規表現",
-    "regexp_helper": "regexpのフォーマットが正しくありません"
+    "regexp_helper": "regexpのフォーマットが正しくありません",
+    "replaced": "置き換え完了"
   },
   "settings": {
     "darkmode": "ダークモード",

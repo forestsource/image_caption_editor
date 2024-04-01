@@ -50,7 +50,8 @@
     "replace_partial_tag": "Replace Part of a Tag",
     "target_tag": "Target TAG",
     "regexp_per_tag": "Regexp",
-    "regexp_helper": "invalid regexp format"
+    "regexp_helper": "invalid regexp format",
+    "replaced": "Replaced"
   },
   "settings": {
     "darkmode": "Dark Mode",
