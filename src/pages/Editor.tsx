@@ -12,6 +12,9 @@ import Typography from "@mui/material/Typography";
 import Fab from "@mui/material/Fab";
 import SaveIcon from "@mui/icons-material/Save";
 import Pagination from "@mui/material/Pagination";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
 import Autocomplete, {
   AutocompleteChangeReason,
   AutocompleteChangeDetails,
@@ -26,6 +29,7 @@ import { TagEditorContext } from "../Contexts/TagEditorContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
 import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
+import { Replacer } from "../components/Replacer";
 
 // DnD
 import {
@@ -83,13 +87,12 @@ export function Editor() {
     fetchSuggestionTags();
   }, []);
 
-  // Change tags when page changes
   useEffect(() => {
     tagEditorDispatch({
       type: "SET_TAGS",
       payload: dataset().caption.content,
     });
-  }, [pageIndex]);
+  }, [pageIndex, datasets]);
 
   async function fetchSuggestionTags() {
     const suggestionTags = await loadSuggestionTags();
@@ -308,6 +311,19 @@ export function Editor() {
                 );
               }}
             ></Autocomplete>
+            <Box>
+              <Accordion>
+                <AccordionSummary
+                  id="accordion-header"
+                  aria-controls="accordion-content"
+                >
+                  {t("general.advanced")}
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Replacer currentPage={pageIndex} />
+                </AccordionDetails>
+              </Accordion>
+            </Box>
             <Box
               display="flex"
               justifyContent="center"

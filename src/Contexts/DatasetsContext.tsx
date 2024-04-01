@@ -9,6 +9,7 @@ type DatasetsAction =
   | { type: "CREATE_DATASETS"; payload: FileSystemDirectoryHandle }
   | { type: "SET_DATASETS"; payload: Dataset[] }
   | { type: "ADD_DATASET"; payload: Dataset }
+  | { type: "UPDATE_DATASET"; payload: Dataset }
   | { type: "REMOVE_DATASET"; payload: string }
   | { type: "REMOVE_CAPTION_TAG"; payload: string }
   | { type: "SAVE_CAPTION"; payload: Dataset }
@@ -31,6 +32,14 @@ const datasetsReducer = (
       return { ...state, datasets: action.payload };
     case "ADD_DATASET":
       return { ...state, datasets: [...state.datasets, action.payload] };
+    case "UPDATE_DATASET":
+      const newDatasets = state.datasets.map((dataset) => {
+        if (dataset.name === action.payload.name) {
+          return action.payload;
+        }
+        return dataset;
+      });
+      return { ...state, datasets: newDatasets };
     case "REMOVE_DATASET":
       return {
         ...state,

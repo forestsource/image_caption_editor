@@ -7,7 +7,8 @@
     "suffix": "End",
     "tag": "TAG",
     "tags": "TAGs",
-    "search": "Search"
+    "search": "Search",
+    "advanced": "Advanced"
   },
   "dataset": {
     "no_picked": "Cancel directory pickup",

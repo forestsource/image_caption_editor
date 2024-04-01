@@ -7,8 +7,8 @@ import Autocomplete, {
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SellIcon from "@mui/icons-material/Sell";
 import { useTranslation } from "react-i18next";
-import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { Dataset } from "../types";
+import { flatTags } from "../utils/DatasetUtil";
 
 interface ReplaceRegexpTagProps {
   datasets: Dataset[];
@@ -22,10 +22,10 @@ export function ReplaceOneTag({
   const { t } = useTranslation();
   const [beforeTag, setBeforeTag] = React.useState("");
   const [afterTag, setAfterTag] = React.useState("");
-  const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
-  const allTags = Array.from(new Set(flatTags));
+  const allTags = Array.from(new Set(flatTags(datasets)));
 
   const replaceATag = () => {
+    console.debug("replaceATag");
     datasets.forEach((dataset) => {
       const newCaptionContent = dataset.caption.content.map((tag) => {
         if (tag === beforeTag) {
@@ -35,6 +35,7 @@ export function ReplaceOneTag({
       });
       dataset.caption.content = newCaptionContent;
     });
+    console.debug(datasets);
     updateDataset(datasets);
   };
 

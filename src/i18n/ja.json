@@ -7,7 +7,8 @@
     "suffix": "末尾",
     "tag": "タグ",
     "tags": "タグ",
-    "search": "検索"
+    "search": "検索",
+    "advanced": "詳細"
   },
   "dataset": {
     "no_picked": "フォルダ選択をキャンセルしました。",

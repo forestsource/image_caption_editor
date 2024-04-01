@@ -79,3 +79,16 @@ export async function loadDatasetFolder(): Promise<Dataset[]>{
       throw e;
     }
   }
+
+export function flatTags(datasets: Dataset[]): string[] {
+  return datasets.flatMap((dataset) => {
+    if (
+      dataset === undefined ||
+      dataset.caption === undefined ||
+      dataset.caption.content === undefined
+    ) {
+      return [];
+    }
+    return dataset.caption.content;
+  });
+};

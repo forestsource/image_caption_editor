@@ -8,6 +8,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AbcIcon from "@mui/icons-material/Abc";
 import { useTranslation } from "react-i18next";
 
+import { flatTags } from "../utils/DatasetUtil";
 import { Dataset } from "../types";
 
 interface ReplacePartialTagProps {
@@ -24,8 +25,7 @@ export function ReplacePartialTag({
   const [beforeStringPartialTag, setBeforeStringPartialTag] =
     React.useState("");
   const [afterStringPartialTag, setAfterStringPartialTag] = React.useState("");
-  const flatTags = datasets.flatMap((dataset) => dataset.caption.content);
-  const allTags = Array.from(new Set(flatTags));
+  const allTags = Array.from(new Set(flatTags(datasets)));
 
   const onChangePartialTag = (
     _event: React.SyntheticEvent<Element, Event>,
