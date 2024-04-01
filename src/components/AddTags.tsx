@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
+import { SettingsContext } from "../Contexts/SettingsContext";
 import { Severity as sv, suggestionTags } from "../types";
 import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
 
@@ -27,6 +28,7 @@ export function AddTags() {
   const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
   const { dispatch: DataSetDispatch } = useContext(DatasetsContext);
   const { state, dispatch } = useContext(DatasetsContext);
+  const { state: settingsState } = useContext(SettingsContext);
   const datasets = state.datasets;
   const [suggestionTags, setSuggestionTags] = React.useState<suggestionTags[]>(
     []
@@ -39,7 +41,9 @@ export function AddTags() {
   }, []);
 
   async function fetchSuggestionTags() {
-    const suggestionTags = await loadSuggestionTags();
+    const suggestionTags = await loadSuggestionTags(
+      settingsState.setting.tagStyle
+    );
     setSuggestionTags(suggestionTags);
   }
 

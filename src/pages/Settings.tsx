@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 
 import { SettingsContext } from "../Contexts/SettingsContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
-import { PreferredLanguage as pl, Severity as sv } from "../types";
+import { PreferredLanguage as pl, Severity as sv, tagStyle } from "../types";
 import Typography from "@mui/material/Typography";
 
 export function Settings() {
@@ -29,6 +29,12 @@ export function Settings() {
   };
   const handleLanguageChange = (event: SelectChangeEvent<pl>) => {
     dispatch({ type: "CHANGE_LANGUAGE", payload: event.target.value as pl });
+  };
+  const handleTagStyle = (event: SelectChangeEvent<tagStyle>) => {
+    dispatch({
+      type: "CHANGE_TAG_STYLE",
+      payload: event.target.value as tagStyle,
+    });
   };
   const handleSave = () => {
     dispatch({
@@ -68,11 +74,31 @@ export function Settings() {
               onChange={handleLanguageChange}
             >
               <MenuItem value={pl.EN}>
-                {" "}
                 <Typography>English</Typography>
               </MenuItem>
               <MenuItem value={pl.JA}>
                 <Typography>日本語</Typography>
+              </MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        <Box sx={{ paddingTop: "1em" }}>
+          <FormControl>
+            <InputLabel id="tagstyle-select-label">
+              {t("settings.tag_style")}
+            </InputLabel>
+            <Select
+              labelId="tagstyle-select-label"
+              id="tagstyle-select"
+              value={state.setting.tagStyle}
+              label="style"
+              onChange={handleTagStyle}
+            >
+              <MenuItem value={tagStyle.DANBOORU}>
+                <Typography>{tagStyle.DANBOORU}</Typography>
+              </MenuItem>
+              <MenuItem value={tagStyle.E621}>
+                <Typography>{tagStyle.E621}</Typography>
               </MenuItem>
             </Select>
           </FormControl>

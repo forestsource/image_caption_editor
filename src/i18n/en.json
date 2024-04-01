@@ -56,7 +56,8 @@
   },
   "settings": {
     "darkmode": "Dark Mode",
-    "language": "Language"
+    "language": "Language",
+    "tag_style": "TAG Style"
   },
   "add_tag": {
     "insert_to": "Insert to",

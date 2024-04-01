@@ -27,6 +27,7 @@ import type { Dataset, Image, Caption, suggestionTags } from "../types";
 import { DatasetsContext } from "../Contexts/DatasetsContext";
 import { TagEditorContext } from "../Contexts/TagEditorContext";
 import { NotificationsContext } from "../Contexts/NotificationsContext";
+import { SettingsContext } from "../Contexts/SettingsContext";
 import { Severity as sv } from "../types";
 import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
 import { Replacer } from "../components/Replacer";
@@ -62,6 +63,7 @@ export function Editor() {
   const { state: tagEditorState, dispatch: tagEditorDispatch } =
     useContext(TagEditorContext);
   const { dispatch: notificationsDispatch } = useContext(NotificationsContext);
+  const { state: settingsState } = useContext(SettingsContext);
   const datasets = datasetsState.datasets;
   const tags = tagEditorState.currentTags;
   const { pageId } = useParams();
@@ -95,7 +97,9 @@ export function Editor() {
   }, [pageIndex, datasets]);
 
   async function fetchSuggestionTags() {
-    const suggestionTags = await loadSuggestionTags();
+    const suggestionTags = await loadSuggestionTags(
+      settingsState.setting.tagStyle
+    );
     setSuggestionTags(suggestionTags);
   }
 

@@ -56,7 +56,8 @@
   },
   "settings": {
     "darkmode": "ダークモード",
-    "language": "言語"
+    "language": "言語",
+    "tag_style": "タグの形式"
   },
   "add_tag": {
     "insert_to": "挿入位置",

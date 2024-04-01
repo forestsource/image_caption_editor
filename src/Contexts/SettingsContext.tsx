@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from "react";
 import i18n from "i18next";
 
 import { Setting } from "../types";
-import { PreferredLanguage as pl } from "../types";
+import { PreferredLanguage as pl, tagStyle } from "../types";
 
 type SettingsState = {
   setting: Setting;
@@ -12,13 +12,20 @@ type SettingsAction =
   | { type: "SET_SETTING"; payload: Setting }
   | { type: "USE_USER_DEFAULT" }
   | { type: "CHANGE_LANGUAGE"; payload: pl }
+  | { type: "CHANGE_TAG_STYLE"; payload: tagStyle }
   | { type: "SAVE_SETTING"; payload: Setting };
 
 const SettingsContext = createContext<{
   state: SettingsState;
   dispatch: React.Dispatch<SettingsAction>;
 }>({
-  state: { setting: { darkMode: false, preferredLanguage: pl.EN } },
+  state: {
+    setting: {
+      darkMode: false,
+      preferredLanguage: pl.EN,
+      tagStyle: tagStyle.DANBOORU,
+    },
+  },
   dispatch: () => undefined,
 });
 
@@ -36,6 +43,14 @@ const settingsReducer = (
         setting: {
           ...state.setting,
           preferredLanguage: action.payload,
+        },
+      };
+    case "CHANGE_TAG_STYLE":
+      return {
+        ...state,
+        setting: {
+          ...state.setting,
+          tagStyle: action.payload,
         },
       };
     case "USE_USER_DEFAULT": {
@@ -77,7 +92,11 @@ const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [state, dispatch] = useReducer(settingsReducer, {
-    setting: { darkMode: false, preferredLanguage: pl.EN },
+    setting: {
+      darkMode: false,
+      preferredLanguage: pl.EN,
+      tagStyle: tagStyle.DANBOORU,
+    },
   });
 
   return (

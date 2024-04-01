@@ -7,6 +7,7 @@ The application provides a user interface for editing tags in a dataset.
 
 ## Features
 
+- support Tag completion (danbooru/e621 style)
 - You can Add/Delete/Replace each image individually.
 - You can Add/Delete/Replace multiple images at once
 - EN/JP support

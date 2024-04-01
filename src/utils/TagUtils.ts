@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import { suggestionTags } from "../types";
+import { suggestionTags, tagStyle } from "../types";
 
 export function tagSplitter(tags: string): string[] {
   if (tags === "") {
@@ -8,8 +8,8 @@ export function tagSplitter(tags: string): string[] {
   return tags.split(",").map((tag) => tag.trim());
 }
 
-export async function loadSuggestionTags(): Promise<suggestionTags[]> {
-  const response = await fetch(process.env.PUBLIC_URL + "/danbooru.csv");
+export async function loadSuggestionTags(style: tagStyle): Promise<suggestionTags[]> {
+  const response = await fetch(process.env.PUBLIC_URL + `/${style}.csv`);
   const csvData = await response.text();
   const parsedCsvData = Papa.parse(csvData, {
     header: false,

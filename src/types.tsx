@@ -26,9 +26,15 @@ export enum PreferredLanguage {
   EN = "en",
 }
 
+export enum tagStyle {
+  DANBOORU = "danbooru",
+  E621 = "e621",
+}
+
 export interface Setting {
   darkMode: boolean;
   preferredLanguage: PreferredLanguage;
+  tagStyle: tagStyle;
 }
 
 export enum Severity {
