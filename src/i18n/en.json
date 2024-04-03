@@ -21,7 +21,7 @@
     "list": "List",
     "batch_edit": "Batch Processing",
     "settings": "Settings",
-    "report": "Report Bugs"
+    "report": "Report Bugs/Feedback"
   },
   "list": {
     "no_dataset": "Please load the dataset first."
