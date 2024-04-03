@@ -22,6 +22,7 @@ import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { Severity as sv } from "../types";
 import { loadDatasetFolder } from "../utils/DatasetUtil";
 import { DirectoryLoadError, InvalidFileTypeError } from "../Errors";
+import { removeDuplicate } from "../utils/DatasetUtil";
 
 const DRAWER_WIDTH = 3 / 12;
 
@@ -83,7 +84,7 @@ export function Sidebar() {
         },
       });
     }
-    dispatch({ type: "SET_DATASETS", payload: datasets });
+    dispatch({ type: "SET_DATASETS", payload: removeDuplicate(datasets) });
   }
 
   const navigate = useNavigate();

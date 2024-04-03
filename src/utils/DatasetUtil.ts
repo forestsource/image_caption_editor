@@ -61,24 +61,24 @@ export const createDataset = async (dirHandle: FileSystemDirectoryHandle) => {
   return datasets;
 };
 
-export async function loadDatasetFolder(): Promise<Dataset[]>{
-    let dirHandle = null;
-    try {
-      dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
-      return createDataset(dirHandle);
-    } catch (e) {
-      if (e instanceof DOMException) {
-        if (e.name === "AbortError") {
-          throw new DirectoryLoadError("Cancel directory pickup");
-        } 
-      } 
-      if(e instanceof TypeError) {
-        throw new InvalidFileTypeError("Invalid file type");
-      } 
-      console.error(e);
-      throw e;
+export async function loadDatasetFolder(): Promise<Dataset[]> {
+  let dirHandle = null;
+  try {
+    dirHandle = await window.showDirectoryPicker({ mode: "readwrite" });
+    return createDataset(dirHandle);
+  } catch (e) {
+    if (e instanceof DOMException) {
+      if (e.name === "AbortError") {
+        throw new DirectoryLoadError("Cancel directory pickup");
+      }
     }
+    if (e instanceof TypeError) {
+      throw new InvalidFileTypeError("Invalid file type");
+    }
+    console.error(e);
+    throw e;
   }
+}
 
 export function flatTags(datasets: Dataset[]): string[] {
   return datasets.flatMap((dataset) => {
@@ -91,4 +91,16 @@ export function flatTags(datasets: Dataset[]): string[] {
     }
     return dataset.caption.content;
   });
+}
+
+export function removeDuplicate(datasets: Dataset[]): Dataset[] {
+  const uniqueDatasets: Dataset[] = [];
+  const uniqueNames: string[] = [];
+  datasets.forEach((dataset) => {
+    if (!uniqueNames.includes(dataset.name)) {
+      uniqueDatasets.push(dataset);
+      uniqueNames.push(dataset.name);
+    }
+  });
+  return uniqueDatasets;
 }

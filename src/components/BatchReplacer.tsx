@@ -12,6 +12,7 @@ import { ReplaceOneTag } from "./ReplaceOneTag";
 import { ReplacePartialTag } from "./ReplacePartialTag";
 import { ReplaceRegexpTag } from "./ReplaceRegexpTag";
 import { Dataset } from "../types";
+import { removeDuplicate } from "../utils/DatasetUtil";
 
 export function BatchReplacer() {
   const { t } = useTranslation();
@@ -20,7 +21,7 @@ export function BatchReplacer() {
   const datasets = state.datasets;
 
   const saveDatasets = (datasets: Dataset[]) => {
-    dispatch({ type: "SET_DATASETS", payload: datasets });
+    dispatch({ type: "SET_DATASETS", payload: removeDuplicate(datasets) });
     notificationsDispatch({
       type: "NOTIFY",
       payload: { open: true, msg: t("replace.replaced"), severity: sv.SUCCESS },

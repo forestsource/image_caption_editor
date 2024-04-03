@@ -31,6 +31,7 @@ import { SettingsContext } from "../Contexts/SettingsContext";
 import { Severity as sv } from "../types";
 import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
 import { Replacer } from "../components/Replacer";
+import { removeDuplicate } from "../utils/DatasetUtil";
 
 // DnD
 import {
@@ -175,7 +176,7 @@ export function Editor() {
   ) => {
     console.log("onChangeTags: ", value);
     dataset().caption.content = value;
-    datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
+    datasetsDispatch({ type: "SET_DATASETS", payload: removeDuplicate(datasets) });
     tagEditorDispatch({ type: "SET_TAGS", payload: value });
   };
   const onDeleteTag = (event: React.MouseEvent) => {
@@ -184,7 +185,7 @@ export function Editor() {
     console.debug("onDeleteTag: ", tag);
     const newTags = tags.filter((item) => item !== tag);
     dataset().caption.content = newTags;
-    datasetsDispatch({ type: "SET_DATASETS", payload: datasets });
+    datasetsDispatch({ type: "SET_DATASETS", payload: removeDuplicate(datasets) });
     tagEditorDispatch({ type: "SET_TAGS", payload: newTags });
   };
   async function onSaveCaption() {

@@ -20,6 +20,7 @@ import { NotificationsContext } from "../Contexts/NotificationsContext";
 import { SettingsContext } from "../Contexts/SettingsContext";
 import { Severity as sv, suggestionTags } from "../types";
 import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
+import { removeDuplicate } from "../utils/DatasetUtil";
 
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
@@ -91,7 +92,7 @@ export function AddTags() {
       }
     });
     console.debug("handleAdd: ", addTag);
-    DataSetDispatch({ type: "SET_DATASETS", payload: datasets });
+    DataSetDispatch({ type: "SET_DATASETS", payload: removeDuplicate(datasets) });
   };
 
   return (
