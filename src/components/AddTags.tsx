@@ -21,6 +21,7 @@ import { SettingsContext } from "../Contexts/SettingsContext";
 import { Severity as sv, suggestionTags } from "../types";
 import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
 import { removeDuplicate } from "../utils/DatasetUtil";
+import { set } from "idb-keyval";
 
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
@@ -36,6 +37,8 @@ export function AddTags() {
   );
   const [addTag, setAddTag] = React.useState<string>("");
   const [insertTo, setInsertTo] = React.useState<string>("prefix");
+  const [insertToN, setInsertToN] = React.useState<number>(2);
+  const [insertFrom, setInsertFrom] = React.useState<string>("prefix");
 
   useEffect(() => {
     fetchSuggestionTags();
@@ -69,6 +72,10 @@ export function AddTags() {
     });
   };
 
+  const addBtnDisabled = () => {
+    return addTag === "";
+  };
+
   const onChangeTag = (
     _event: React.SyntheticEvent,
     value: string | null,
@@ -79,9 +86,22 @@ export function AddTags() {
     setAddTag(value || "");
   };
 
+  const onChangeTagFree = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.debug("onChangeTagFree: ", event.target.value);
+    setAddTag(event.target.value);
+  }
+
   const handleInsertToChange = (event: SelectChangeEvent<string>) => {
     setInsertTo(event.target.value);
   };
+
+  const handleInsertFromChange = (event: SelectChangeEvent<string>) => {
+    setInsertFrom(event.target.value);
+  };
+
+  const handleInsertToNChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInsertToN(parseInt(event.target.value));
+  }
 
   const handleAdd = () => {
     datasets.forEach((dataset) => {
@@ -94,6 +114,20 @@ export function AddTags() {
     console.debug("handleAdd: ", addTag);
     DataSetDispatch({ type: "SET_DATASETS", payload: removeDuplicate(datasets) });
   };
+
+  const handleAddN = () => {
+    const absPos = insertToN - 1;
+    datasets.forEach((dataset) => {
+      if (insertFrom === "prefix") {
+        dataset.caption.content = dataset.caption.content.slice(0, absPos).concat([addTag]).concat(dataset.caption.content.slice(absPos));
+      } else {
+        dataset.caption.content = dataset.caption.content.slice(0, absPos).concat([addTag]).concat(dataset.caption.content.slice(absPos));
+      }
+    });
+    console.debug("handleAddN: ", addTag);
+    DataSetDispatch({ type: "SET_DATASETS", payload: removeDuplicate(datasets) });
+  };
+
 
   return (
     <Paper elevation={3} sx={{ margin: "1em" }}>
@@ -114,7 +148,7 @@ export function AddTags() {
             options={[]}
             onChange={onChangeTag}
             renderInput={(params) => (
-              <TextField {...params} label={t("general.tag")} value={addTag} />
+              <TextField {...params} label={t("general.tag")} value={addTag} onChange={onChangeTagFree} />
             )}
           />
         </Box>
@@ -133,8 +167,37 @@ export function AddTags() {
           <Button
             sx={{ marginLeft: "2em" }}
             variant="outlined"
-            disabled={addTag === ""}
+            disabled={addBtnDisabled()}
             onClick={handleAdd}
+          >
+            {t("add_tag.add_tag_btn")}
+          </Button>
+        </Box>
+        <Box sx={{ padding: "1em" }}>
+          <InputLabel id="Insert-to-label">{t("add_tag.insert_to_n")}</InputLabel>
+          <Select
+            labelId="Insert-to-label"
+            id="Insert-to-select"
+            value={insertFrom}
+            onChange={handleInsertFromChange}
+          >
+            <MenuItem value={"prefix"}>{t("general.prefix")}</MenuItem>
+            <MenuItem value={"suffix"}>{t("general.suffix")}</MenuItem>
+          </Select>
+          <TextField
+            type="number"
+            value={insertToN}
+            inputProps={{
+              step: "1",
+              min: "1"
+            }}
+            onChange={handleInsertToNChange}
+          />
+          <Button
+            sx={{ marginLeft: "2em" }}
+            variant="outlined"
+            disabled={addBtnDisabled()}
+            onClick={handleAddN}
           >
             {t("add_tag.add_tag_btn")}
           </Button>

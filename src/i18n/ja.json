@@ -61,6 +61,7 @@
   },
   "add_tag": {
     "insert_to": "挿入位置",
+    "insert_to_n": "任意位置へ挿入",
     "add_tag_btn": "タグを追加"
   }
 }

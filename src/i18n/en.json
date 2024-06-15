@@ -61,6 +61,7 @@
   },
   "add_tag": {
     "insert_to": "Insert to",
+    "insert_to_n": "Insert at any position",
     "add_tag_btn": "Add TAG"
   }
 }
