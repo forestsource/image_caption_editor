@@ -57,7 +57,7 @@ export function DeleteTags() {
   };
 
   const deleteDuplicateTags = () => {
-    datasets.forEach((dataset) => {
+    datasets.forEach(() => {
       dispatch({ type: "REMOVE_DUPLICATE_TAGS", payload: "" });
     });
     notificationsDispatch({

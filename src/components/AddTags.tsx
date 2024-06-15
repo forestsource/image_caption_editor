@@ -21,7 +21,6 @@ import { SettingsContext } from "../Contexts/SettingsContext";
 import { Severity as sv, suggestionTags } from "../types";
 import { loadSuggestionTags, searchIncludeComplement } from "../utils/TagUtils";
 import { removeDuplicate } from "../utils/DatasetUtil";
-import { set } from "idb-keyval";
 
 const INPUT_LENGTH_ENABLE_AUTOCOMPLETE = 2;
 
