@@ -63,5 +63,8 @@
     "insert_to": "Insert to",
     "insert_to_n": "Insert at any position",
     "add_tag_btn": "Add TAG"
+  },
+  "delete_tag": {
+    "del_duplicate": "Delete Duplicates"
   }
 }

@@ -12,6 +12,7 @@ type DatasetsAction =
   | { type: "UPDATE_DATASET"; payload: Dataset }
   | { type: "REMOVE_DATASET"; payload: string }
   | { type: "REMOVE_CAPTION_TAG"; payload: string }
+  | { type: "REMOVE_DUPLICATE_TAGS"; payload: "" }
   | { type: "SAVE_CAPTION"; payload: Dataset }
   | { type: "REMOVE_ALL"; payload: "" };
 
@@ -53,6 +54,12 @@ const datasetsReducer = (
         const newCaptionContent = dataset.caption.content.filter((tag) => {
           return tag !== action.payload;
         });
+        dataset.caption.content = newCaptionContent;
+      });
+      return { ...state };
+    case "REMOVE_DUPLICATE_TAGS":
+      state.datasets.forEach((dataset) => {
+        const newCaptionContent = Array.from(new Set(dataset.caption.content));
         dataset.caption.content = newCaptionContent;
       });
       return { ...state };
